@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>a simple web component example</title>
+    <link rel='stylesheet' type="text/css" href="styles.css" >
+</head>
+<body>
+    <div id='container'>
+        <h1>A simple Web Component Example</h1>
+
+        <user-card 
+            name='Hans im Unglück' 
+            avatar="./images/stock.jpg"
+            callback=myCallbackFunction
+        >
+            <div slot='email'>hansug@googlemail.com</div>
+            <div slot='phone'>+4X 15X XXX 6X4 XX</div>
+        </user-card>
+        <user-card 
+            name='Jon Doe' 
+            avatar="./images/brille.jpg"
+            callback=myCallbackFunction
+        >
+            <div slot='email'>jondoe@gmail.com</div>
+            <div slot='phone'>666-66666-666</div>
+        </user-card>
+    </div>
+    <script src="userCard.js"></script>
+    <script src="index.js"></script>
+    <script>
+        init()
+    </script>
+</body>
+</html>

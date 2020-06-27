@@ -1,0 +1,21 @@
+body {
+    /*
+    *this is an user defined style or a custom 
+    *css property. this prop will always reach the 
+    *shadow dom!
+    */
+    --theme-colour: #909497; 
+    background-color: #CACFD2;
+}
+#container {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1 {
+    /*
+    *here i use the user defined style
+    */
+    color: var(--theme-colour);
+}
