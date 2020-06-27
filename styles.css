@@ -6,6 +6,7 @@ body {
     */
     --theme-colour: #909497; 
     background-color: #CACFD2;
+    width: 1080px;
 }
 #container {
     margin: auto;
