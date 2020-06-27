@@ -33,7 +33,8 @@ template.innerHTML = `
             color: #fff;
             border: 0;
             border-radius: 5px;
-            padding: 5px 10px;
+            padding-top: 5px;
+            padding-rigth: 20px;
         }
 
     </style>
