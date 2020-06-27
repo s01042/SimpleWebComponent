@@ -16,7 +16,7 @@ template.innerHTML = `
         .user-card {
             font-family: 'Arial', sans-serif;
             background: #f4f4f4;
-            width: 450px;
+            width: 470px;
             display: grid;
             grid-template-columns: 1fr 2fr;
             grid-gap: 10px;
