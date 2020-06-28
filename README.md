@@ -42,3 +42,6 @@ Custom css properties will **always** "reach" the web component. This is a way t
 In this example I only scratched on the surface of web components. There is a lot more to be discovered, for example event bubbling, nesting web components and wire them up with events and event handlers. 
 
 There is a growing number of ready to use web components and there are frameworks that eases to build web components. [This](https://www.polymer-project.org/) is a good starting point to learn more.
+
+# Try out the example web component
+Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pages, where a little demo is hosted.
