@@ -4,10 +4,12 @@
  * on the web component
  * @param {*} data 
  */
-function myCallbackFunction(data) {
-    alert(`handled as callback in index.js with data: ${data.innerText}`)
+function myCallbackFunction(elementKey) {
+    const selectedElement = results.get(elementKey)
+    alert(`handled as callback in index.js with ID data: ${selectedElement}`)
 }
 
+let results = new Map()
 
 function init() {
     /**
@@ -34,11 +36,19 @@ function fetchAsync() {
     fetch('https://randomuser.me/api/?results=50')
         .then( response => response.json())
         .then( data => {
+            /**
+             * if we successfully fetched new items lets clear the result hashmap
+             */
+            results.clear()
             data.results.forEach( result => {
                 let phone = result.cell
                 let email = result.email
                 let name = result.name.first + ' ' + result.name.last
                 let img = result.picture.large
+                let identifier = result.login.uuid
+                //and lets then add the new items 
+                results.set(identifier, result)
+
                 //creata a new instance of UserCard
                 let userCard = new UserCard()
                 //create a new attribute
@@ -46,9 +56,12 @@ function fetchAsync() {
                 nameAttribute.value = name
                 var imgAttribute = document.createAttribute("avatar");
                 imgAttribute.value = img
+                var identifierAttribute = document.createAttribute("identifier")
+                identifierAttribute.value = identifier
                 //you can use attributes to set the data
                 userCard.attributes.setNamedItem(nameAttribute)
                 userCard.attributes.setNamedItem(imgAttribute)
+                userCard.attributes.setNamedItem(identifierAttribute)
                 //or you can use setter methods which are mapped to attributes 
                 //see source of userCards.js
                 //userCard.Name = name

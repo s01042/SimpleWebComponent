@@ -63,6 +63,8 @@ class UserCard extends HTMLElement {
 
         this.showInfo = true;       //this is a state var of my component
         this.callback = null;       //here we will store a ref to a callback func.
+        this.id = null;             //will be used in callback to notify about 
+                                    //the selection of a card
 
         /**
          * without shadow dom the styles from the document 
@@ -76,6 +78,7 @@ class UserCard extends HTMLElement {
         //see index.html
         this.shadowRoot.querySelector('h3').innerText = this.getAttribute('name')
         this.shadowRoot.querySelector('img').src = this.getAttribute('avatar')
+        this.id = this.getAttribute('identifier')
     }
 
     /**
@@ -110,7 +113,7 @@ class UserCard extends HTMLElement {
      */
     callbackHost(data) {
         if (this.callback) {
-            this.callback(data)
+            this.callback(this.id)
         }
     }
 
@@ -135,6 +138,14 @@ class UserCard extends HTMLElement {
 
     set Image(newImage) {
         this.setAttribute('avatar', newImage)
+    }
+
+    get Identifier() {
+        return this.getAttribute('identifier')
+    }
+
+    set Identifier(newValue) {
+        this.setAttribute('identifier', newValue)
     }
 
     /**
@@ -167,7 +178,7 @@ class UserCard extends HTMLElement {
      * observe changes of their values
      */
     static get observedAttributes() {
-        return ['name', 'avatar']
+        return ['name', 'avatar', 'identifier']
     }
 
     /**
@@ -180,12 +191,15 @@ class UserCard extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         //console.log(`attribute changed ${name} with new value ${newValue}`)
         switch (name) {
-          case 'name':
-            this.shadowRoot.querySelector('h3').innerText = newValue
-            break;
-          case 'avatar':
-            this.shadowRoot.querySelector('img ').src = newValue
-            break;
+            case 'name':
+                this.shadowRoot.querySelector('h3').innerText = newValue
+                break;
+            case 'avatar':
+                this.shadowRoot.querySelector('img ').src = newValue
+                break;
+            case 'identifier':
+                this.id = newValue
+                break    
         }
     }
 }
