@@ -16,7 +16,8 @@ template.innerHTML = `
         .user-card {
             font-family: 'Arial', sans-serif;
             background: #f4f4f4;
-            width: 470px;
+            width: 400px;
+            height: 170px;
             display: grid;
             grid-template-columns: 1fr 2fr;
             grid-gap: 10px;
@@ -24,8 +25,9 @@ template.innerHTML = `
             border-bottom: var(--theme-colour) 5px solid;
         }
         .user-card img {
-            width: 100%;
-            border-radius: 50%            
+            border-radius: 50%;
+            max-width: 100%;
+            height: auto;            
         }
         .user-card button {
             cursor: pointer;
