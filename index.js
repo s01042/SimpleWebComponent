@@ -6,7 +6,12 @@
  */
 function myCallbackFunction(elementKey) {
     const selectedElement = results.get(elementKey)
-    alert(`handled as callback in index.js with ID data: ${selectedElement}`)
+    if (selectedElement) {
+        alert(`handled as callback in index.js with ID data: ${selectedElement}`)
+    } else {
+        alert(`no more data available for this item`)
+    }
+    
 }
 
 let results = new Map()
