@@ -1,4 +1,15 @@
 /**
+ * I switched to ES6 modules. With modules it's easier to split 
+ * source code into multiple files. Each js-file is a module. 
+ * A module can export classes, a library of functions, constants,
+ * vars, etc.
+ * A module is just a file. One js source file is one module.
+ * Modules can load each other and interchange functionality 
+ * via import and export statements.
+ * The userCard module for example only exports the UserCard class.
+ * Every module that wants to use the UserCard must import this class
+ * from here. (see index.js and index.html)
+ * 
  * I'm using a template for my web component 
  */
 const template = document.createElement('template')
@@ -55,9 +66,9 @@ template.innerHTML = `
 `
 
 /**
- * here is the corresponding class that extend HTMLElement
+ * here is the corresponding class that extends HTMLElement
  */
-class UserCard extends HTMLElement {
+export default class UserCard extends HTMLElement {
     constructor() {
         super()
 
@@ -70,9 +81,8 @@ class UserCard extends HTMLElement {
          * without shadow dom the styles from the document 
          * and the styles from this component would affect each other
          */
-
         this.attachShadow({ mode: 'open' })
-        //here we appending the template on then freshly open shadowroot
+        //here we appending the template on then freshly opened shadowroot
         this.shadowRoot.appendChild(template.content.cloneNode(true))
         //attribute are a way to 'send' data to the web component
         //see index.html
@@ -209,3 +219,4 @@ class UserCard extends HTMLElement {
  * the name of the custom element must have a dash in it
  */
 window.customElements.define('user-card', UserCard)
+
