@@ -44,12 +44,12 @@ function init() {
  */
 function installMenuEventHandler() {
     let menu = document.querySelector('#floatingButton')
-    menu.addEventListener('onNew', (e) =>{
+    menu.addEventListener('onNew', (e) => {
         alert(`connect your event handler for 'onNew' Event`)
     })
-    menu.addEventListener('onSend', (e =>{
+    menu.addEventListener('onSend', (e) => {
         alert(`connect your event handler for 'onSend' Event`)
-    }))
+    })
 }
 
 /**
