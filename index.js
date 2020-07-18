@@ -5,14 +5,14 @@
 import UserCard from './components/userCard.js'
 
 /**
- * a simple callback function which i will bind 
- * on the web component
+ * this is a simple event handler that i bind to the 
+ * custom event of the userCard component
  * @param {*} data 
  */
-function myCallbackFunction(elementKey) {
+function myEventHandler(elementKey) {
     const selectedElement = results.get(elementKey)
     if (selectedElement) {
-        alert(`handled as callback in index.js with ID data: ${selectedElement}`)
+        alert(`eventhandler in index.js with ID data '${elementKey}'. this is '${selectedElement.email}'`)
     } else {
         alert(`no more data available for this item`)
     }
@@ -24,13 +24,12 @@ let results = new Map()
 function init() {
     installMenuEventHandler()
     /**
-     * here we iterate over the declarative inserted user-card components and use 
-     * the public method setCallback of these components to
-     * register the simple callback from above
+     * here we iterate over the declarative inserted user-card components and 
+     * bind the event handler for selecting a card
      */
     let userCards = document.querySelectorAll('user-card')
     userCards.forEach( userCard => {
-        userCard.setCallback(myCallbackFunction)
+        userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
     })
 
     /**
@@ -40,14 +39,16 @@ function init() {
     setTimeout(fetchAsync(), 3000)
 }
 
-
+/**
+ * we install the event handler for the floatingButton component
+ */
 function installMenuEventHandler() {
     let menu = document.querySelector('#floatingButton')
     menu.addEventListener('onNew', (e) =>{
         alert(`connect your event handler for 'onNew' Event`)
     })
     menu.addEventListener('onSend', (e =>{
-        alert(`connect your event handler for 'onSave' Event`)
+        alert(`connect your event handler for 'onSend' Event`)
     }))
 }
 
@@ -90,7 +91,7 @@ function fetchAsync() {
                 imgAttribute.value = img
                 var identifierAttribute = document.createAttribute("identifier")
                 identifierAttribute.value = identifier
-                // //you can use attributes to set the data
+                //you can use attributes to set the data
                 userCard.attributes.setNamedItem(nameAttribute)
                 userCard.attributes.setNamedItem(imgAttribute)
                 userCard.attributes.setNamedItem(identifierAttribute)
@@ -105,7 +106,7 @@ function fetchAsync() {
                     if (slot.name === 'phone') slot.innerText = cell
                 })
 
-                userCard.setCallback(myCallbackFunction)
+                userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
                 contentDiv.appendChild(userCard)
             })
 

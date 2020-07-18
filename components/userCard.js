@@ -73,9 +73,9 @@ export default class UserCard extends HTMLElement {
         super()
 
         this.showInfo = true;       //this is a state var of my component
-        this.callback = null;       //here we will store a ref to a callback func.
         this.id = null;             //will be used in callback to notify about 
                                     //the selection of a card
+        this.eventName = 'onSelectCard';
 
         /**
          * without shadow dom the styles from the document 
@@ -108,23 +108,14 @@ export default class UserCard extends HTMLElement {
         }
     }
 
-    /**
-     * this is a public function to set a callback function
-     * here it is only for testing reasons 
-     * @param {callbackFuntion} callbackFuntion 
-     */
-    setCallback(callbackFuntion) {
-        this.callback = callbackFuntion
-    }
 
     /**
-     * here i call the callback function if one is available
-     * @param {stringData} data 
+     * i switched to customEvents to inform the host about 
+     * the selection of a userCard
      */
-    callbackHost(data) {
-        if (this.callback) {
-            this.callback(this.id)
-        }
+    onSelect() {        
+        let event = new CustomEvent(this.eventName, {detail: this.id})
+        this.dispatchEvent(event)
     }
 
     /**
@@ -168,7 +159,7 @@ export default class UserCard extends HTMLElement {
             this.toggleInfo()
         })
         this.shadowRoot.querySelector('h3').addEventListener('click', (e) => {
-            this.callbackHost(this.shadowRoot.querySelector('h3'))
+           this.onSelect()
         })
     }
 
