@@ -7,6 +7,9 @@
     <link rel='stylesheet' type="text/css" href="styles.css" >
 </head>
 <body>
+    <div id='floatingButton'>
+        <floating-button></floating-button>
+    </div>
     <div id='container'>
         <h1>A simple Web Component Example</h1>
         <!--
@@ -42,7 +45,8 @@
 
     </div>
     <script type="module">
-        import UserCard from './userCard.js'
+        import UserCard from './components/userCard.js'
+        import FloatingButton from './components/floatingButton.js'
         import {init} from './index.js'
         init()
     </script>

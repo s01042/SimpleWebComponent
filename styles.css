@@ -20,3 +20,8 @@ h1 {
     */
     color: var(--theme-colour);
 }
+#floatingButton {
+    position: fixed;
+    right: 60px;
+    bottom: 40px;
+}

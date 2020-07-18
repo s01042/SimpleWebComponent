@@ -2,7 +2,7 @@
  * I use ES6 modules here.
  */
 
-import UserCard from './userCard.js'
+import UserCard from './components/userCard.js'
 
 /**
  * a simple callback function which i will bind 
@@ -22,6 +22,7 @@ function myCallbackFunction(elementKey) {
 let results = new Map()
 
 function init() {
+    installMenuEventHandler()
     /**
      * here we iterate over the declarative inserted user-card components and use 
      * the public method setCallback of these components to
@@ -37,6 +38,17 @@ function init() {
      * web service
      */
     setTimeout(fetchAsync(), 3000)
+}
+
+
+function installMenuEventHandler() {
+    let menu = document.querySelector('#floatingButton')
+    menu.addEventListener('onNew', (e) =>{
+        alert(`connect your event handler for 'onNew' Event`)
+    })
+    menu.addEventListener('onSend', (e =>{
+        alert(`connect your event handler for 'onSave' Event`)
+    }))
 }
 
 /**
