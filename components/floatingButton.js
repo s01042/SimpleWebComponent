@@ -31,8 +31,8 @@ template.innerHTML = `
         }
 
         @keyframes slidein {
-            0%  {top: 200px}
-            100% {top: -40px}
+            0%  {right: -200px}
+            100% {right: 2vw}
         }
         
         @keyframes slideout {
@@ -74,7 +74,7 @@ template.innerHTML = `
 
         #hiddenContainer.slidein {
             animation-name: slidein;
-            animation-duration: 300ms;
+            animation-duration: 500ms;
         }
 
         #hiddenContainer.slideout {
