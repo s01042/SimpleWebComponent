@@ -30,6 +30,16 @@ template.innerHTML = `
             to {transform: rotate(180deg)}
         }
 
+        @keyframes slidein {
+            0%  {top: 200px}
+            100% {top: -40px}
+        }
+        
+        @keyframes slideout {
+            0%  {top: -40px}
+            100% {top: 200px}
+        }
+
         .btn-line {
             width: 28px;
             height: 3px;
@@ -57,9 +67,19 @@ template.innerHTML = `
             position: absolute;
             bottom: 30px;
             align-items: center;
-            height: 150px;
+            height: 200px;
             width: 80px;
             padding-top: 10px;
+        }
+
+        #hiddenContainer.slidein {
+            animation-name: slidein;
+            animation-duration: 300ms;
+        }
+
+        #hiddenContainer.slideout {
+            animation-name: slideout;
+            animation-duration: 300ms;
         }
 
         #hiddenContainer button {
@@ -67,8 +87,8 @@ template.innerHTML = `
             background: var(--theme-colour);
             color: #fff;
             border: 0;
-            width: 50px;
-            height: 50px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             margin-top: 10px;
         }
@@ -146,11 +166,14 @@ export default class FloatingButton extends HTMLElement {
         let hiddenContainer = this.shadowRoot.querySelector('#hiddenContainer')
     
         if (this.menuOpen) {           
-            menuButton.classList.add('close')  
+            menuButton.classList.add('close')
+            hiddenContainer.className = 'slidein'
             hiddenContainer.style.display = 'flex'
+
         } else {
             menuButton.classList.remove('close')
-            hiddenContainer.style.display= 'none'
+            hiddenContainer.className = 'slideout'
+            setTimeout((e) => {hiddenContainer.style.display= 'none'}, 100)
         }
     }
 
