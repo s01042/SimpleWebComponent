@@ -3,6 +3,9 @@
  */
 
 import UserCard from './components/userCard.js'
+import serviceComponent from './components/serviceComponent.js'
+const myServiceComponent = new serviceComponent()
+
 
 /**
  * this is a simple event handler that i bind to the 
@@ -46,6 +49,7 @@ function installMenuEventHandler() {
     let menu = document.querySelector('#floatingButton')
     menu.addEventListener('onNew', (e) => {
         alert(`connect your event handler for 'onNew' Event`)
+        myServiceComponent.getNearestCity()
     })
     menu.addEventListener('onSend', (e) => {
         alert(`connect your event handler for 'onSend' Event`)

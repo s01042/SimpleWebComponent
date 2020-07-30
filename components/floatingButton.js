@@ -53,6 +53,8 @@ template.innerHTML = `
             align-items: center;
             height: 200px;
             width: 120px;
+            border: 1px solid;
+            fontsize: 1em;
         }
 
         #menu-btn {
@@ -70,6 +72,7 @@ template.innerHTML = `
             height: 200px;
             width: 80px;
             padding-top: 10px;
+            border: 1px solid;
         }
 
         #hiddenContainer.slidein {
@@ -87,8 +90,9 @@ template.innerHTML = `
             background: var(--theme-colour);
             color: #fff;
             border: 0;
-            width: 70px;
-            height: 70px;
+            width: 5rem;
+            height: 5rem;
+            font-size: 1rem;
             border-radius: 50%;
             margin-top: 10px;
         }
