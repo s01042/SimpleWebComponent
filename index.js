@@ -59,6 +59,9 @@ function installMenuEventHandler() {
 /**
      * here we will fetch some data to insert new user-card elements on the
      * fly and via code
+     * The random user web service is CORS ready. He is sending the
+     * necessary HTTP Header 'Access-Control-Allow-Origin' with its
+     * response.
      */
 function fetchAsync() {
     let contentDiv = document.querySelector('#container')

@@ -1,13 +1,20 @@
+/**
+ * this is a simple serviceComponent Class
+ * in it i will bundle my data access functionality eg. 
+ * fetch data from web service, post data to web service,
+ * persist data localy etc.
+ */
 export default class serviceComponent {
 
     constructor() {
         this.locationServiceURL = 'https://www.metaweather.com/api/location/search/?lattlong='
-        this.CORSProxyURL = 'https://cors-anywhere.herokuapp.com/'
+        this.CORSProxyURL_PROD = 'https://cors-anywhere.herokuapp.com/'
+        this.CORSProxyURL_DEV = 'http://localhost:8080/'
     }
 
     /**
      * navigator.geolocation.getCurrentPosition is async
-     * so i wrapp it in a promise and make getGeolocation async itself
+     * so i wrapped it in a promise and make getGeolocation async itself
      */
     getGeolocation() {
         const promise = new Promise(function(resolve, reject) {
@@ -42,15 +49,13 @@ export default class serviceComponent {
             } = result
             // build webservice url
             let serviceUrl = this.locationServiceURL + lat + ',' + long
-            alert(serviceUrl)
-            console.log(`try with CORS Proxy: ${this.CORSProxyURL + serviceUrl}`)
-            console.log(`service URL is: ${serviceUrl}`)
-            fetch(this.CORSProxyURL + serviceUrl)
+            // and use the CORS Proxy
+            fetch(this.CORSProxyURL_PROD + serviceUrl)
                 .then( response => {
                     if( response.ok ) {
                         response.json()
                         .then(data => {
-                            alert(data)
+                            alert(JSON.stringify(data))
                         })
                     } else {
                         alert(`HTTP error: ${response.status}`)
@@ -64,36 +69,4 @@ export default class serviceComponent {
         })
     }
 
-    getNearestCityWithJSONP() {
-        this.getGeolocation()
-            .then( result => {
-                // object deconstruction
-                const {
-                    coords: {latitude: lat},
-                    coords: {longitude: long}
-                    
-                } = result
-                // build webservice url
-                let serviceUrl = this.locationServiceURL + lat + ',' + long
-                this.requestServerCall(serviceUrl)
-            })
-            .catch( e => {
-                console.log(e)
-            })
-    }
-
-    //Construct the script tag at Runtime
-    requestServerCall(url) {
-        url = url + '&callback=jsonpCallback'
-        alert(`trying JSONP with ${url}`)
-        var head = document.head;
-        var script = document.createElement("script");
-        script.setAttribute("src", url);
-        head.appendChild(script);
-        head.removeChild(script);
-    }
-
-    jsonpCallback(data) {
-        alert(data.message); // Response data from the server
-    }
 }
