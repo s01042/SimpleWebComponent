@@ -48,7 +48,7 @@ function init() {
 function installMenuEventHandler() {
     let menu = document.querySelector('#floatingButton')
     menu.addEventListener('onNew', (e) => {
-        alert(`connect your event handler for 'onNew' Event`)
+        //alert(`connect your event handler for 'onNew' Event`)
         myServiceComponent.getNearestCity()
     })
     menu.addEventListener('onSend', (e) => {
