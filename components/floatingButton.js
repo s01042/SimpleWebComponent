@@ -53,7 +53,6 @@ template.innerHTML = `
             align-items: center;
             height: 200px;
             width: 120px;
-            border: 1px solid;
             fontsize: 1em;
         }
 
@@ -72,7 +71,6 @@ template.innerHTML = `
             height: 200px;
             width: 80px;
             padding-top: 10px;
-            border: 1px solid;
         }
 
         #hiddenContainer.slidein {

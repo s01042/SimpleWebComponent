@@ -48,12 +48,31 @@ function init() {
 function installMenuEventHandler() {
     let menu = document.querySelector('#floatingButton')
     menu.addEventListener('onNew', (e) => {
-        //alert(`connect your event handler for 'onNew' Event`)
-        myServiceComponent.getNearestCity()
+        onNewEventHandler()
     })
     menu.addEventListener('onSend', (e) => {
         alert(`connect your event handler for 'onSend' Event`)
     })
+}
+
+/**
+ * here i will use the syntactic sugar of await
+ * because of this i have to sign this function as async
+ */
+async function onNewEventHandler() {
+    try {
+        let geolocation = await myServiceComponent.getGeolocation()
+        console.dir(geolocation)
+        let nearestCities = await myServiceComponent.getNearestCities(geolocation)
+        console.dir(nearestCities)
+        let weatherData = await myServiceComponent.getWeatherFromWOEID(nearestCities[0].woeid)
+        let singleDayData = weatherData.consolidated_weather[0]
+        console.log(singleDayData )
+        alert(`you are near '${weatherData.title}' with weather condition '${singleDayData.weather_state_name}' and Temp '${Math.round(singleDayData.the_temp)}° Celsius'`)
+    }
+    catch( e ) {
+        alert(`oops, something went wrong: ${e}`)        
+    }
 }
 
 /**
