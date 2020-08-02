@@ -2,7 +2,7 @@
  * this is a simple serviceComponent Class
  * in it i will bundle all my data access functionality eg. 
  * fetch data from web service, post data to web service,
- * persist data localy etc.
+ * persist data locally etc.
  */
 export default class ServiceComponent {
 
@@ -14,18 +14,25 @@ export default class ServiceComponent {
         this.appConfig = theAppConfig
     }
 
-    loadLocallyStoredData() {
+    /**
+     * this is not the perfect solution!
+     * normally i would totaly wrapp the dataSet and only expose some
+     * public interfaces to acceess data and to write data into the dataSet
+     */
+    getLocallyStoredData() {
+
+        const that = this
         let promise = new Promise(function(resolve, reject) {
-            myLocalStorage = localStorage
-            let data = this.myLocalStorage.getItem('GPSLogger.v1')
+            if(that.dataSet != null) resolve (that.dataSet) 
+
+            that.myLocalStorage = localStorage
+            let data = that.myLocalStorage.getItem('s01042.GPSLogger.v1')
             if (data === null) {
-                this.dataSet = new Map()
-                resolve(dataSet)
+                that.dataSet = new Map()
+                resolve(that.dataSet)
             } else {
                 //todo deserialize data and init this.dataSet
             }
-      
-
         })
         return promise
     }

@@ -1,9 +1,6 @@
 /**
  * TODOs:
- * make a config class and implement settings via props
- * let there be a boolean prop isDevEnvironment in the config
- * and return the corresponding CORS proxy url depending on true/fals
- *
+ * 
  * make an app class and inject the config object via class construtor
  * implement methods 
  * default export the app class
@@ -20,7 +17,6 @@ import AppConfig from './components/appConfig.js'
 
 const myAppConfig = new AppConfig() //runs in DEV environment
 const myServiceComponent = new ServiceComponent(myAppConfig)
-let results = new Map()
 
 /**
  * this is a simple event handler that i bind to the 
@@ -28,17 +24,25 @@ let results = new Map()
  * @param {*} data 
  */
 function myEventHandler(elementKey) {
-    const selectedElement = results.get(elementKey)
-    if (selectedElement) {
-        alert(`eventhandler in index.js with ID data '${elementKey}'. this is '${selectedElement.email}'`)
-    } else {
-        alert(`no more data available for this item`)
-    }
-    
+    myServiceComponent.getLocallyStoredData()
+        .then( map => {
+            let selectedElement = map.get(elementKey)
+            if (selectedElement) {
+                alert(`eventhandler in index.js with ID data '${elementKey}'. this is '${selectedElement.email}'`)
+            } else {
+                alert(`no more data available for item with id '${elementKey}'`)
+            }        
+        })
 }
 
 function init() {
     installMenuEventHandler()
+
+    myServiceComponent.getLocallyStoredData().then( res => {
+        //todo iterate over the map and build card components dynamically
+        console.dir(res)
+    })
+
     /**
      * here we iterate over the declarative inserted user-card components and 
      * bind the event handler for selecting a card
@@ -80,19 +84,24 @@ async function onNewEventHandler() {
         let nearestCities = await myServiceComponent.getNearestCities(geolocation)
         console.dir(nearestCities)
         let weatherData = await myServiceComponent.getWeatherFromWOEID(nearestCities[0].woeid)
-        let singleDayData = weatherData.consolidated_weather[0]
-        console.log(singleDayData )
-        //alert(`you are near '${weatherData.title}' with weather condition '${singleDayData.weather_state_name}' and Temp '${Math.round(singleDayData.the_temp)}° Celsius'`)
-        stackNewUserCard(geolocation, nearestCities, singleDayData)
+        let singleDayWeatherData = weatherData.consolidated_weather[0]
+        console.log (singleDayWeatherData)
+        stackNewUserCard (geolocation, nearestCities, singleDayWeatherData)
     }
     catch( e ) {
         alert(`oops, something went wrong: ${e}`)        
     }
 }
 
+/**
+ * inserts a new userCard object in front of the existing ones, so 
+ * that they are always ordered descanding by time stamp 
+ * @param {*} geolocation 
+ * @param {*} nearestCities 
+ * @param {*} singleDayData 
+ */
 function stackNewUserCard(geolocation, nearestCities, singleDayData) {
     let contentDiv = document.querySelector('#container')
-    let userCard = new UserCard()
 
     let formatOptions = {
         month: '2-digit',
@@ -105,18 +114,22 @@ function stackNewUserCard(geolocation, nearestCities, singleDayData) {
     let nearestCity = nearestCities[0]
     let lat = geolocation.coords.latitude
     let long = geolocation.coords.longitude
+    let googleMapHREF = `https://www.google.com/maps/place/${lat},${long}`
 
-    userCard.Name = new Date(geolocation.timestamp).toLocaleString('de-DE', formatOptions)
+    let userCard = new UserCard()
+    // set an id for the userCard
+    userCard.Identifier = myServiceComponent.generateGUID()
+    userCard.Name = new Date(geolocation.timestamp).toLocaleString('de-DE', formatOptions) + ' Uhr'
     userCard.Image = myAppConfig.weatherIconBaseUrl + singleDayData.weather_state_abbr + '.svg'
     // now fill the slots with data
     let slots = userCard.shadowRoot.querySelectorAll('slot')
     slots.forEach(slot => {
-        if (slot.name === 'email') slot.innerText = 
-            `LAT: ${lat.toFixed(4)}, LONG: ${long.toFixed(4)}`
+        if (slot.name === 'email') slot.innerHTML = 
+            `<a href="${googleMapHREF}">LAT: ${lat.toFixed(4)} LONG: ${long.toFixed(4)}</a>`
+            //try href here like https://www.google.com/maps/place/52.4062,13.10386
         if (slot.name === 'phone') slot.innerText = 
             `Nearest City: ${nearestCity.title} (${Math.round(nearestCity.distance / 1000)} km)`
     })
-
     userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
     contentDiv.insertBefore(userCard, contentDiv.firstChild)
 
@@ -186,4 +199,4 @@ function fetchAsync() {
         }) 
 }
 
-export { init, results }
+export { init }
