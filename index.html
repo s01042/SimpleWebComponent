@@ -8,25 +8,26 @@
 </head>
 <body>
 
+    <h1>A simple Web Component Example</h1>
 
     <div id='container'>
         <div id='floatingButton'>
             <floating-button></floating-button>
         </div>
     
-        <h1>A simple Web Component Example</h1>
         <!--
             here we're using our newly created web component declarative
         -->
         <user-card 
-            name='Hans im Unglück' 
-            avatar="./images/stock.jpg"
+            name="02.08.2020, 14:48 Uhr" 
+            avatar="https://www.metaweather.com/static/img/weather/lc.svg"
             callback=myCallbackFunction
             identifier= '1'
         >
-            <div slot='email'>hansug@googlemail.com</div>
-            <div slot='phone'>+4X 15X XXX 6X4 XX</div>
+            <div slot='email'>LAT: 52.4062, LONG: 13.10386</div>
+            <div slot='phone'>Nearest City: Berlin (6km)</div>
         </user-card>
+        <!--
         <user-card 
             name='Jon Doe' 
             avatar="./images/brille.jpg"
@@ -45,6 +46,7 @@
             <div slot='email'>s0X0XXXX@googlemail.com</div>
             <div slot='phone'>+49 1XX 27X XXX 2X</div>
         </user-card>
+        -->
     </div>
     <!--
         most modern browsers now supports ES6 modules

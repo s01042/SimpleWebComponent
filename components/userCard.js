@@ -16,6 +16,7 @@ const template = document.createElement('template')
 
 /**
  * with encapsulated css styles
+ * this is a template literal
  */
 template.innerHTML = `
     <style>
@@ -27,17 +28,19 @@ template.innerHTML = `
         .user-card {
             font-family: 'Arial', sans-serif;
             background: #f4f4f4;
-            width: 400px;
+            width: 500px;
             height: 170px;
             display: grid;
             grid-template-columns: 1fr 2fr;
             grid-gap: 10px;
             margin-bottom: 15px;
             border-bottom: var(--theme-colour) 5px solid;
+            padding-top: 1em;
+            padding-left: 1em;
         }
         .user-card img {
             border-radius: 50%;
-            max-width: 100%;
+            max-width: 70%;
             height: auto;            
         }
         .user-card button {

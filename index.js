@@ -1,11 +1,26 @@
 /**
+ * TODOs:
+ * make a config class and implement settings via props
+ * let there be a boolean prop isDevEnvironment in the config
+ * and return the corresponding CORS proxy url depending on true/fals
+ *
+ * make an app class and inject the config object via class construtor
+ * implement methods 
+ * default export the app class
+ * 
+ * or even better: make the app class a web component itself then
+ * the only html tag in the index.html would be <myApp />
+ * 
  * I use ES6 modules here.
  */
 
 import UserCard from './components/userCard.js'
-import serviceComponent from './components/serviceComponent.js'
-const myServiceComponent = new serviceComponent()
+import ServiceComponent from './components/serviceComponent.js'
+import AppConfig from './components/appConfig.js'
 
+const myAppConfig = new AppConfig() //runs in DEV environment
+const myServiceComponent = new ServiceComponent(myAppConfig)
+let results = new Map()
 
 /**
  * this is a simple event handler that i bind to the 
@@ -22,8 +37,6 @@ function myEventHandler(elementKey) {
     
 }
 
-let results = new Map()
-
 function init() {
     installMenuEventHandler()
     /**
@@ -39,7 +52,7 @@ function init() {
      * here i simulate a delay when fetching data from the
      * web service
      */
-    setTimeout(fetchAsync(), 3000)
+    //setTimeout(fetchAsync(), 3000)
 }
 
 /**
@@ -51,7 +64,8 @@ function installMenuEventHandler() {
         onNewEventHandler()
     })
     menu.addEventListener('onSend', (e) => {
-        alert(`connect your event handler for 'onSend' Event`)
+        let id = myServiceComponent.generateGUID()
+        alert(`will later be implemented to send data via REST: ${id}`)
     })
 }
 
@@ -68,11 +82,44 @@ async function onNewEventHandler() {
         let weatherData = await myServiceComponent.getWeatherFromWOEID(nearestCities[0].woeid)
         let singleDayData = weatherData.consolidated_weather[0]
         console.log(singleDayData )
-        alert(`you are near '${weatherData.title}' with weather condition '${singleDayData.weather_state_name}' and Temp '${Math.round(singleDayData.the_temp)}° Celsius'`)
+        //alert(`you are near '${weatherData.title}' with weather condition '${singleDayData.weather_state_name}' and Temp '${Math.round(singleDayData.the_temp)}° Celsius'`)
+        stackNewUserCard(geolocation, nearestCities, singleDayData)
     }
     catch( e ) {
         alert(`oops, something went wrong: ${e}`)        
     }
+}
+
+function stackNewUserCard(geolocation, nearestCities, singleDayData) {
+    let contentDiv = document.querySelector('#container')
+    let userCard = new UserCard()
+
+    let formatOptions = {
+        month: '2-digit',
+        day: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    }
+
+    let nearestCity = nearestCities[0]
+    let lat = geolocation.coords.latitude
+    let long = geolocation.coords.longitude
+
+    userCard.Name = new Date(geolocation.timestamp).toLocaleString('de-DE', formatOptions)
+    userCard.Image = myAppConfig.weatherIconBaseUrl + singleDayData.weather_state_abbr + '.svg'
+    // now fill the slots with data
+    let slots = userCard.shadowRoot.querySelectorAll('slot')
+    slots.forEach(slot => {
+        if (slot.name === 'email') slot.innerText = 
+            `LAT: ${lat.toFixed(4)}, LONG: ${long.toFixed(4)}`
+        if (slot.name === 'phone') slot.innerText = 
+            `Nearest City: ${nearestCity.title} (${Math.round(nearestCity.distance / 1000)} km)`
+    })
+
+    userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
+    contentDiv.insertBefore(userCard, contentDiv.firstChild)
+
 }
 
 /**
