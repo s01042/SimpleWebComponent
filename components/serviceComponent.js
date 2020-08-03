@@ -23,10 +23,13 @@ export default class ServiceComponent {
 
         const that = this
         let promise = new Promise(function(resolve, reject) {
+            //make sure, that the deserialization takes place only once
             if(that.dataSet != null) resolve (that.dataSet) 
 
             that.myLocalStorage = localStorage
             let data = that.myLocalStorage.getItem('s01042.GPSLogger.v1')
+            //if the are no data in the localstorage create a new 
+            //empty dataSet and return it
             if (data === null) {
                 that.dataSet = new Map()
                 resolve(that.dataSet)
@@ -38,8 +41,54 @@ export default class ServiceComponent {
     }
 
     /**
+     * Immutable Objects!
+     * 
+     * at first sight this implementation might see a littel bit strange, but if 
+     * you think about data binding in web components and also for example in React
+     * then you will get a better understandig for what is going on here and why 
+     * i do it this way.
+     * Why the hell do we create a new map object every time we add a new element
+     * in front of the existing ones? It is because another component might observe
+     * the change of binded attributes. if another component is binded to the 
+     * dataSet object via reference, then no changes will happen to this binding
+     * if we only insert and remove elements in/from the referenced map object.
+     * that is because the reference to the map object is still the same. 
+     * to really trigger the attribute change
+     * event, we need to change the object reference itself. we force this by creating a new 
+     * map instance and handle it over to the binded component. this mechanism is called
+     * Immutable objects. 
+     * @param {*} theDataObject 
+     */
+    stackNewDataObject(theDataObject) {
+
+        //preserve the this context because inside the
+        //promise constructor this context will change
+        const that = this
+
+        let promise = new Promise (function (resolve, reject) {
+
+            if (that.dataSet === null) {
+                reject(`no dataSet present. try to call 'getLocallyStoredData' first`)
+                //todo: maybe call getLocallyStoredData here instead of rejecting the promise?
+            }
+            var newMap = new Map()
+            //insert the new element at first position
+            newMap.set (theDataObject.ID, theDataObject)
+            //then add the existing ones
+            that.dataSet.forEach ( entry => {
+                newMap.set (entry.ID, entry)
+            })
+            //then set the reference to the newly created map object
+            that.dataSet = newMap
+            //and resolve the promise
+            resolve(that.dataSet)
+        })
+        return promise
+    }
+
+    /**
      * navigator.geolocation.getCurrentPosition is async
-     * so i wrapped it in a promise and make getGeolocation async itself
+     * so i wrapped it in a promise and make getGeolocation itself async 
      */
     getGeolocation() {
         const promise = new Promise(function(resolve, reject) {

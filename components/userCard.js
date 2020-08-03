@@ -11,6 +11,10 @@
  * from here. (see index.js and index.html)
  * 
  * I'm using a template for my web component 
+ * 
+ * todo: add a visual representation for new userCard objects 
+ * eg. some flash of the background color
+ * 
  */
 const template = document.createElement('template')
 
@@ -153,7 +157,7 @@ export default class UserCard extends HTMLElement {
     }
 
     /**
-     * this is a component lifecycle massage which is called 
+     * this is a component lifecycle method which is called 
      * when the component is connected to the dom of the hosting page
      * here we simply add event listeners to the button and the h3
      */
@@ -167,7 +171,7 @@ export default class UserCard extends HTMLElement {
     }
 
     /**
-     * this is a component lifecycla message
+     * this is a component lifecycla method
      * when the component is disconnected from the dom we will
      * remove our event handlers
      */

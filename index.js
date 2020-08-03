@@ -80,13 +80,28 @@ function installMenuEventHandler() {
 async function onNewEventHandler() {
     try {
         let geolocation = await myServiceComponent.getGeolocation()
-        console.dir(geolocation)
         let nearestCities = await myServiceComponent.getNearestCities(geolocation)
-        console.dir(nearestCities)
         let weatherData = await myServiceComponent.getWeatherFromWOEID(nearestCities[0].woeid)
         let singleDayWeatherData = weatherData.consolidated_weather[0]
-        console.log (singleDayWeatherData)
-        stackNewUserCard (geolocation, nearestCities, singleDayWeatherData)
+        //bundle the collected data to a new dataObject for local storage
+        let dataObject = {
+            Location: geolocation,
+            Cities: nearestCities,
+            WeatherData: singleDayWeatherData,
+            ID: myServiceComponent.generateGUID()
+        }
+        myServiceComponent.stackNewDataObject(dataObject)
+            .then( result => {
+                //i can use this for displaying status infos in the gui
+                //about the async storage operation
+                console.dir(result)
+            })
+        stackNewUserCard (
+            dataObject.Location, 
+            dataObject.Cities, 
+            dataObject.WeatherData,
+            dataObject.ID
+        )
     }
     catch( e ) {
         alert(`oops, something went wrong: ${e}`)        
@@ -100,7 +115,7 @@ async function onNewEventHandler() {
  * @param {*} nearestCities 
  * @param {*} singleDayData 
  */
-function stackNewUserCard(geolocation, nearestCities, singleDayData) {
+function stackNewUserCard(geolocation, nearestCities, singleDayData, objectID) {
     let contentDiv = document.querySelector('#container')
 
     let formatOptions = {
@@ -118,7 +133,7 @@ function stackNewUserCard(geolocation, nearestCities, singleDayData) {
 
     let userCard = new UserCard()
     // set an id for the userCard
-    userCard.Identifier = myServiceComponent.generateGUID()
+    userCard.Identifier = objectID
     userCard.Name = new Date(geolocation.timestamp).toLocaleString('de-DE', formatOptions) + ' Uhr'
     userCard.Image = myAppConfig.weatherIconBaseUrl + singleDayData.weather_state_abbr + '.svg'
     // now fill the slots with data
