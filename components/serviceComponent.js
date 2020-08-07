@@ -18,23 +18,30 @@ export default class ServiceComponent {
      * this is not the perfect solution!
      * normally i would totaly wrapp the dataSet and only expose some
      * public interfaces to acceess data and to write data into the dataSet
+     * 
+     * the localstorage is bound to the protocol AND the domain which is
+     * serving the corresponding web site. 
      */
     getLocallyStoredData() {
 
         const that = this
         let promise = new Promise(function(resolve, reject) {
             //make sure, that the deserialization takes place only once
+            //if dataSet is not null, we are here not for the first time
             if(that.dataSet != null) resolve (that.dataSet) 
 
             that.myLocalStorage = localStorage
-            let data = that.myLocalStorage.getItem('s01042.GPSLogger.v1')
-            //if the are no data in the localstorage create a new 
+            let persistedData = that.myLocalStorage.getItem('s01042.GPSLogger.v1')
+            if (persistedData != null) {
+                that.dataSet = new Map(JSON.parse(persistedData, that.reviver))
+            }
+            //if there are no data in the localstorage create a new 
             //empty dataSet and return it
-            if (data === null) {
+            if (that.dataSet == null) {
                 that.dataSet = new Map()
                 resolve(that.dataSet)
             } else {
-                //todo deserialize data and init this.dataSet
+                resolve(that.dataSet)
             }
         })
         return promise
@@ -66,7 +73,9 @@ export default class ServiceComponent {
         const that = this
 
         let promise = new Promise (function (resolve, reject) {
-
+            //this should never happen because the app will start 
+            //with a call of getLocallyStoredData which will initialize 
+            //the dadaSet
             if (that.dataSet === null) {
                 reject(`no dataSet present. try to call 'getLocallyStoredData' first`)
                 //todo: maybe call getLocallyStoredData here instead of rejecting the promise?
@@ -74,8 +83,9 @@ export default class ServiceComponent {
             var newMap = new Map()
             //insert the new element at first position
             newMap.set (theDataObject.ID, theDataObject)
-            //then add the existing ones
+            //then add the existing ones after the new one
             that.dataSet.forEach ( entry => {
+                //todo: does map preserve the item order?
                 newMap.set (entry.ID, entry)
             })
             //then set the reference to the newly created map object
@@ -87,6 +97,67 @@ export default class ServiceComponent {
     }
 
     /**
+     * 
+     * @param {*} theMappedData 
+     */
+    persistDataLocally(theMappedData) {
+        //store the data locally. only strings are allowed
+        try {
+            //can't stringify a javascript map object directly
+            //either convert to an array eg. [...theMappedData]
+            //which only works for one dimensional maps
+            //or use a replacer function when stringify
+            let stringToStore = JSON.stringify(theMappedData, this.replacer)
+            this.myLocalStorage.setItem('s01042.GPSLogger.v1', stringToStore)
+            return true
+        }
+        catch (e) {
+            return false
+        }
+        
+    }
+
+    /**
+     * completly new to me! PART 1
+     * JSON.stringify can't stringify map objects
+     * because the Map instance as it doesn't have any properties
+     * the result would therefore be {}.
+     * BUT stringify supports a second parameter 'replacer' and JSON.parse
+     * supports a second parameter 'reviver'.
+     * replacer will 'transform' a map into an array which stringify can work with
+     * @param {*} key 
+     * @param {*} value 
+     */
+    replacer(key, value) {
+        //todo: check this syntax!
+        const originalObject = this[key];
+        if(originalObject instanceof Map) {
+          return {
+            dataType: 'Map',
+            value: Array.from(originalObject.entries()), // or with spread: value: [...originalObject]
+          };
+        } else {
+          return value;
+        }
+    }
+
+    /**
+     * completly new to me! PART 2
+     * this is the counterpart to replacer and will be used in JSON.parse to
+     * reconstruct the map 
+     * @param {*} key 
+     * @param {*} value 
+     */
+    reviver(key, value) {
+        if(typeof value === 'object' && value !== null) {
+          if (value.dataType === 'Map') {
+            return new Map(value.value);
+          }
+        }
+        return value;
+    }
+
+    /**
      * navigator.geolocation.getCurrentPosition is async
      * so i wrapped it in a promise and make getGeolocation itself async 
      */
@@ -94,11 +165,33 @@ export default class ServiceComponent {
         const promise = new Promise(function(resolve, reject) {
             if( 'geolocation' in navigator ) {
                 navigator.geolocation.getCurrentPosition(
-                    (pos) => {
-                        resolve(pos)
+                    (position) => {
+                        /**
+                         * my observations are: the position object returned
+                         * by navigator.geolocation.getCurrentPosition is not
+                         * 'stringifyable'. That's why i create a new simple object 
+                         * with the same structure as position here that is stringifyable.
+                         */
+                        resolve({
+                            coords: {
+                                accuracy: position.coords.accuracy,
+                                altitude: position.coords.altitude,
+                                altitudeAccuracy: position.coords.altitudeAccuracy,
+                                heading: position.coords.heading,
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude,
+                                speed: position.coords.speed,
+                            },
+                            timestamp: position.timestamp,
+                        })
                     },
                     (error) => {
                         reject(error)
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        maximumAge: 0,
+                        timeout: 5000
                     }
                 )
             } else {

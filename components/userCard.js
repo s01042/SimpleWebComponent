@@ -33,7 +33,7 @@ template.innerHTML = `
             font-family: 'Arial', sans-serif;
             background: #f4f4f4;
             width: 500px;
-            height: 170px;
+            height: 200px;
             display: grid;
             grid-template-columns: 1fr 2fr;
             grid-gap: 10px;
@@ -56,6 +56,9 @@ template.innerHTML = `
             padding-top: 5px;
             padding-rigth: 20px;
         }
+        .user-card p {
+            line-height: 0.7;
+        }
 
     </style>
     
@@ -64,8 +67,9 @@ template.innerHTML = `
         <div>
             <h3></h3>
             <div class='info'>
-                <p><slot name='email' /></p>
-                <p><slot name='phone' /></p>
+                <p><slot name='position' /></p>
+                <p><slot name='city' /></p>
+                <p><slot name='temperature' /></p>
             </div>
             <button id='toggleInfo'>hide info</button>
         </div>

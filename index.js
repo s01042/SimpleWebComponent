@@ -28,7 +28,7 @@ function myEventHandler(elementKey) {
         .then( map => {
             let selectedElement = map.get(elementKey)
             if (selectedElement) {
-                alert(`eventhandler in index.js with ID data '${elementKey}'. this is '${selectedElement.email}'`)
+                alert(`eventhandler in index.js with ID '${elementKey}' and temp of '${Math.round(selectedElement.WeatherData.the_temp)} °C'`)
             } else {
                 alert(`no more data available for item with id '${elementKey}'`)
             }        
@@ -38,9 +38,17 @@ function myEventHandler(elementKey) {
 function init() {
     installMenuEventHandler()
 
-    myServiceComponent.getLocallyStoredData().then( res => {
+    myServiceComponent.getLocallyStoredData().then( dataMap => {
         //todo iterate over the map and build card components dynamically
-        console.dir(res)
+        dataMap.forEach( item => {
+            stackNewUserCard (
+                item.Location,
+                item.City,
+                item.WeatherData,
+                item.ID,
+                false
+            )
+        })
     })
 
     /**
@@ -86,7 +94,7 @@ async function onNewEventHandler() {
         //bundle the collected data to a new dataObject for local storage
         let dataObject = {
             Location: geolocation,
-            Cities: nearestCities,
+            City: nearestCities[0],
             WeatherData: singleDayWeatherData,
             ID: myServiceComponent.generateGUID()
         }
@@ -94,13 +102,16 @@ async function onNewEventHandler() {
             .then( result => {
                 //i can use this for displaying status infos in the gui
                 //about the async storage operation
-                console.dir(result)
+                if (myServiceComponent.persistDataLocally(result)) {
+                    console.dir(result)
+                } 
             })
         stackNewUserCard (
             dataObject.Location, 
-            dataObject.Cities, 
+            dataObject.City, 
             dataObject.WeatherData,
-            dataObject.ID
+            dataObject.ID,
+            true
         )
     }
     catch( e ) {
@@ -115,7 +126,7 @@ async function onNewEventHandler() {
  * @param {*} nearestCities 
  * @param {*} singleDayData 
  */
-function stackNewUserCard(geolocation, nearestCities, singleDayData, objectID) {
+function stackNewUserCard(geolocation, nearestCity, singleDayData, objectID, onTop= false) {
     let contentDiv = document.querySelector('#container')
 
     let formatOptions = {
@@ -126,7 +137,6 @@ function stackNewUserCard(geolocation, nearestCities, singleDayData, objectID) {
         minute: '2-digit'
     }
 
-    let nearestCity = nearestCities[0]
     let lat = geolocation.coords.latitude
     let long = geolocation.coords.longitude
     let googleMapHREF = `https://www.google.com/maps/place/${lat},${long}`
@@ -139,79 +149,22 @@ function stackNewUserCard(geolocation, nearestCities, singleDayData, objectID) {
     // now fill the slots with data
     let slots = userCard.shadowRoot.querySelectorAll('slot')
     slots.forEach(slot => {
-        if (slot.name === 'email') slot.innerHTML = 
+        if (slot.name === 'position') slot.innerHTML = 
             `<a href="${googleMapHREF}">LAT: ${lat.toFixed(4)} LONG: ${long.toFixed(4)}</a>`
             //try href here like https://www.google.com/maps/place/52.4062,13.10386
-        if (slot.name === 'phone') slot.innerText = 
+        if (slot.name === 'city') slot.innerText = 
             `Nearest City: ${nearestCity.title} (${Math.round(nearestCity.distance / 1000)} km)`
+        if (slot.name === 'temperature') slot.innerText = 
+            `Temperature: ${Math.round(singleDayData.the_temp)} °C`
     })
     userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
-    contentDiv.insertBefore(userCard, contentDiv.firstChild)
+    if (onTop) {
+        contentDiv.insertBefore(userCard, contentDiv.firstChild)
+    } else {
+        contentDiv.appendChild(userCard)
+    }
 
 }
 
-/**
-     * here we will fetch some data to insert new user-card elements on the
-     * fly and via code
-     * The random user web service is CORS ready. He is sending the
-     * necessary HTTP Header 'Access-Control-Allow-Origin' with its
-     * response.
-     */
-function fetchAsync() {
-    let contentDiv = document.querySelector('#container')
-
-    fetch('https://randomuser.me/api/?results=50')
-        .then( response => response.json())
-        .then( data => {
-            /**
-             * if we successfully fetched new items lets clear the results hashmap
-             */
-            results.clear()
-            data.results.forEach( result => {
-                /**
-                 * let's use ES6 object deconstruction
-                 * in some cases i will also assign new var names
-                 */
-                const { 
-                    cell, 
-                    email,
-                    picture: {large: img},
-                    login: {uuid: identifier},
-                    name: {first: firstname},
-                    name: {last: lastname},
-                } = result
-                //and lets add the new items 
-                results.set(identifier, result)
-
-                //creata a new instance of UserCard
-                let userCard = new UserCard()
-                // create a new attribute
-                var nameAttribute = document.createAttribute("name");
-                nameAttribute.value = firstname + " " + lastname
-                var imgAttribute = document.createAttribute("avatar");
-                imgAttribute.value = img
-                var identifierAttribute = document.createAttribute("identifier")
-                identifierAttribute.value = identifier
-                //you can use attributes to set the data
-                userCard.attributes.setNamedItem(nameAttribute)
-                userCard.attributes.setNamedItem(imgAttribute)
-                userCard.attributes.setNamedItem(identifierAttribute)
-                //or you can use setter methods which are mapped to attributes 
-                //see source of userCards.js
-                //userCard.Name = firstname + " " + lastname
-                //userCard.Image = img
-                //we also need to fill the slots with data
-                let slots = userCard.shadowRoot.querySelectorAll('slot')
-                slots.forEach(slot => {
-                    if (slot.name === 'email') slot.innerText = email
-                    if (slot.name === 'phone') slot.innerText = cell
-                })
-
-                userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
-                contentDiv.appendChild(userCard)
-            })
-
-        }) 
-}
 
 export { init }
