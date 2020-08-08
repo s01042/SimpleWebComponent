@@ -24,23 +24,26 @@ const template = document.createElement('template')
  */
 template.innerHTML = `
     <style>
-        h3 {
-            color: darkgrey;
+        .user-card h2 {
+            color: #1d405c;
             cursor: pointer;
+            size: 2em
         }
 
         .user-card {
             font-family: 'Arial', sans-serif;
-            background: #f4f4f4;
+            background: #6d7d8a;
             width: 500px;
             height: 200px;
             display: grid;
             grid-template-columns: 1fr 2fr;
             grid-gap: 10px;
             margin-bottom: 15px;
-            border-bottom: var(--theme-colour) 5px solid;
+            border-bottom: #a6a6a6 5px solid;
+            border-right: #a6a6a6 3px solid;
             padding-top: 1em;
             padding-left: 1em;
+            border-radius: 1em;
         }
         .user-card img {
             border-radius: 50%;
@@ -49,7 +52,7 @@ template.innerHTML = `
         }
         .user-card button {
             cursor: pointer;
-            background: var(--theme-colour);
+            background: #525050;
             color: #fff;
             border: 0;
             border-radius: 5px;
@@ -58,6 +61,11 @@ template.innerHTML = `
         }
         .user-card p {
             line-height: 0.7;
+            color: white;
+        }
+        .user-card a {
+            color: #eb9b13;
+            text-decoration: none;
         }
 
     </style>
@@ -65,7 +73,7 @@ template.innerHTML = `
     <div class='user-card'>
         <img />
         <div>
-            <h3></h3>
+            <h2></h2>
             <div class='info'>
                 <p><slot name='position' /></p>
                 <p><slot name='city' /></p>
@@ -97,7 +105,7 @@ export default class UserCard extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true))
         //attribute are a way to 'send' data to the web component
         //see index.html
-        this.shadowRoot.querySelector('h3').innerText = this.getAttribute('name')
+        this.shadowRoot.querySelector('h2').innerText = this.getAttribute('name')
         this.shadowRoot.querySelector('img').src = this.getAttribute('avatar')
         this.id = this.getAttribute('identifier')
     }
@@ -169,7 +177,7 @@ export default class UserCard extends HTMLElement {
         this.shadowRoot.querySelector('#toggleInfo').addEventListener('click', (e) => {
             this.toggleInfo()
         })
-        this.shadowRoot.querySelector('h3').addEventListener('click', (e) => {
+        this.shadowRoot.querySelector('h2').addEventListener('click', (e) => {
            this.onSelect()
         })
     }
@@ -181,7 +189,7 @@ export default class UserCard extends HTMLElement {
      */
     disconnectedCallback() {
         this.shadowRoot.querySelector('#toggleInfo').removeEventListener('click')
-        this.shadowRoot.querySelector('h3').removeEventListener('click')
+        this.shadowRoot.querySelector('h2').removeEventListener('click')
     }
 
     /**
@@ -204,7 +212,7 @@ export default class UserCard extends HTMLElement {
         //console.log(`attribute changed ${name} with new value ${newValue}`)
         switch (name) {
             case 'name':
-                this.shadowRoot.querySelector('h3').innerText = newValue
+                this.shadowRoot.querySelector('h2').innerText = newValue
                 break;
             case 'avatar':
                 this.shadowRoot.querySelector('img ').src = newValue

@@ -28,7 +28,8 @@ function myEventHandler(elementKey) {
         .then( map => {
             let selectedElement = map.get(elementKey)
             if (selectedElement) {
-                alert(`eventhandler in index.js with ID '${elementKey}' and temp of '${Math.round(selectedElement.WeatherData.the_temp)} °C'`)
+                let textToDisplay = 
+                alert(`eventhandler in index.js with ID: '${elementKey}'\weather data created: '${selectedElement.WeatherData.created}'`)
             } else {
                 alert(`no more data available for item with id '${elementKey}'`)
             }        
