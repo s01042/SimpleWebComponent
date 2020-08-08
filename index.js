@@ -29,7 +29,7 @@ function myEventHandler(elementKey) {
             let selectedElement = map.get(elementKey)
             if (selectedElement) {
                 let textToDisplay = new Date(selectedElement.WeatherData.created)
-                alert(`eventhandler in index.js with ID: '${elementKey}'\weather data created: '${textToDisplay.toLocaleString()}'`)
+                alert(`weather data created: '${textToDisplay.toLocaleString()}'`)
             } else {
                 alert(`no more data available for item with id '${elementKey}'`)
             }        
