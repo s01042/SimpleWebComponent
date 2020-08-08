@@ -15,7 +15,7 @@ import UserCard from './components/userCard.js'
 import ServiceComponent from './components/serviceComponent.js'
 import AppConfig from './components/appConfig.js'
 
-const myAppConfig = new AppConfig() //runs in DEV environment
+const myAppConfig = new AppConfig(true) //runs in DEV environment
 const myServiceComponent = new ServiceComponent(myAppConfig)
 
 /**
@@ -61,11 +61,6 @@ function init() {
         userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
     })
 
-    /**
-     * here i simulate a delay when fetching data from the
-     * web service
-     */
-    //setTimeout(fetchAsync(), 3000)
 }
 
 /**

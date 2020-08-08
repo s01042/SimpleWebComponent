@@ -44,6 +44,7 @@ template.innerHTML = `
             padding-top: 1em;
             padding-left: 1em;
             border-radius: 1em;
+            cursor: move;
         }
         .user-card img {
             border-radius: 50%;
@@ -70,7 +71,7 @@ template.innerHTML = `
 
     </style>
     
-    <div class='user-card'>
+    <div class='user-card' draggable='true'>
         <img />
         <div>
             <h2></h2>
