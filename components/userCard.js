@@ -98,6 +98,12 @@ export default class UserCard extends HTMLElement {
         this.eventName = 'onSelectCard';
 
         /**
+         * drag and drop support
+         */
+        this.addEventListener("dragstart", this.__dragStart.bind(this));
+        this.addEventListener("dragend", this.__dragEnd.bind(this));
+
+        /**
          * without shadow dom the styles from the document 
          * and the styles from this component would affect each other
          */
@@ -109,6 +115,16 @@ export default class UserCard extends HTMLElement {
         this.shadowRoot.querySelector('h2').innerText = this.getAttribute('name')
         this.shadowRoot.querySelector('img').src = this.getAttribute('avatar')
         this.id = this.getAttribute('identifier')
+    }
+
+    __dragStart () {
+        console.log (`drag start for item ${this.id}`)
+        this.style.opacity = '0.4'
+    }
+
+    __dragEnd () {
+        console.log (`drag end for item ${this.id}`)
+        this.style.opacity = '1.0'
     }
 
     /**
