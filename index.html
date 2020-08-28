@@ -11,27 +11,28 @@
     <script src="./polyfills/DragDropTouch.js"></script>
 </head>
 <body>
+    <div id='parent'>
+        <h1>GPS Data Logger</h1>
 
-    <h1>GPS Data Logger</h1>
+        <div id='container'>
+            <div id='floatingButton'>
+                <floating-button></floating-button>
+            </div>
+        
+            <!--
+                here we're using our newly created web component declarative
 
-    <div id='container'>
-        <div id='floatingButton'>
-            <floating-button></floating-button>
+            <user-card 
+                name="02.08.2020, 14:48 Uhr" 
+                avatar="https://www.metaweather.com/static/img/weather/lc.svg"
+                callback=myCallbackFunction
+                identifier= '1'
+            >
+                <div slot='email'>LAT: 52.4062, LONG: 13.10386</div>
+                <div slot='phone'>Nearest City: Berlin (6km)</div>
+            </user-card>
+            -->
         </div>
-    
-        <!--
-            here we're using our newly created web component declarative
-
-        <user-card 
-            name="02.08.2020, 14:48 Uhr" 
-            avatar="https://www.metaweather.com/static/img/weather/lc.svg"
-            callback=myCallbackFunction
-            identifier= '1'
-        >
-            <div slot='email'>LAT: 52.4062, LONG: 13.10386</div>
-            <div slot='phone'>Nearest City: Berlin (6km)</div>
-        </user-card>
-        -->
     </div>
     <!--
         most modern browsers now supports ES6 modules
