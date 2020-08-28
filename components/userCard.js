@@ -35,8 +35,8 @@ template.innerHTML = `
 
         .user-card {
   
-            width: 500px;
-            height: 200px;
+            min-width: 500px;
+            min-height: 200px;
             font-family: 'Arial', sans-serif;
             background: #6d7d8a;            
             display: grid;
@@ -73,15 +73,6 @@ template.innerHTML = `
             color: #eb9b13;
             text-decoration: none;
         }
-
-        /*
-        @media only screen and (max-width: 1100px) {
-            .user-card {
-              height: 300px;
-              width: 700px
-            }
-        }
-        */
 
     </style>
     

@@ -8,7 +8,7 @@ body {
     background-color: #2a3e4d;
     font-family: 'Arial', sans-serif;
     font-size: 16px;
-    margin: 0 auto;
+    margin: 0;
     padding: 50px;
 }
 
@@ -23,7 +23,10 @@ body {
 
 #parent {
     background-color: rebeccapurple;
-    padding: 50px;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 50px;
+    width: 80%;
 }
 
 #container {
@@ -31,6 +34,7 @@ body {
     flex-direction: column;
     align-items: center; /* center the card items in the container */
 }
+
 h1 {
     /*
     *here i use the user defined style
@@ -38,8 +42,9 @@ h1 {
     color: var(--theme-colour);
     text-align: center;
 }
+
 #floatingButton {
     position: fixed;
-    right: 5em;
-    bottom: 5em;
+    right: 20px;
+    bottom: 20px;
 }
