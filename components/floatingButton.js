@@ -51,9 +51,10 @@ template.innerHTML = `
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 200px;
+            height: 250px;
             width: 120px;
             fontsize: 1em;
+            background: yellow;
         }
 
         #menu-btn {

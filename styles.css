@@ -8,25 +8,13 @@ body {
     background-color: #2a3e4d;
     font-family: 'Arial', sans-serif;
     font-size: 16px;
-    margin: 0;
-    padding: 50px;
+    margin: 0 auto;
 }
-
-/*
-@media only screen and (max-width: 1100px) {
-
-    body {
-        font-size: 24px;
-    }
-}
-*/
 
 #parent {
     background-color: rebeccapurple;
-    padding-left: 50px;
-    padding-right: 50px;
-    padding-bottom: 50px;
-    width: 80%;
+    padding: 0px;
+    width: 100%;
 }
 
 #container {
@@ -41,10 +29,11 @@ h1 {
     */
     color: var(--theme-colour);
     text-align: center;
+    background: red;
 }
 
 #floatingButton {
     position: fixed;
-    right: 20px;
+    right: 10px;
     bottom: 20px;
 }
