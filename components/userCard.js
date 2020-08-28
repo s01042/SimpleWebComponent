@@ -74,13 +74,14 @@ template.innerHTML = `
             text-decoration: none;
         }
 
+        /*
         @media only screen and (max-width: 1100px) {
             .user-card {
               height: 300px;
               width: 700px
             }
         }
-
+        */
 
     </style>
     
