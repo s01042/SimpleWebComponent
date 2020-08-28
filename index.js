@@ -15,7 +15,7 @@ import UserCard from './components/userCard.js'
 import ServiceComponent from './components/serviceComponent.js'
 import AppConfig from './components/appConfig.js'
 
-const myAppConfig = new AppConfig() //runs in DEV environment
+const myAppConfig = new AppConfig(true) //runs in DEV environment
 const myServiceComponent = new ServiceComponent(myAppConfig)
 
 /**
@@ -116,8 +116,8 @@ async function onNewEventHandler() {
 }
 
 /**
- * inserts a new userCard object in front of the existing ones, so 
- * that they are always ordered descanding by time stamp 
+ * stack a userCard object 
+ * if onTop is true stack it on the first place, else append it
  * @param {*} geolocation 
  * @param {*} nearestCities 
  * @param {*} singleDayData 

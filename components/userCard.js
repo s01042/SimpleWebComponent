@@ -21,6 +21,9 @@ const template = document.createElement('template')
 /**
  * with encapsulated css styles
  * this is a template literal
+ * 
+ * must media queries always follow the standard css declarations?
+ * in other words is the order significant?
  */
 template.innerHTML = `
     <style>
@@ -31,25 +34,27 @@ template.innerHTML = `
         }
 
         .user-card {
-            font-family: 'Arial', sans-serif;
-            background: #6d7d8a;
+  
             width: 500px;
             height: 200px;
+            font-family: 'Arial', sans-serif;
+            background: #6d7d8a;            
             display: grid;
             grid-template-columns: 1fr 2fr;
             grid-gap: 10px;
             margin-bottom: 15px;
-            border-bottom: #a6a6a6 5px solid;
-            border-right: #a6a6a6 3px solid;
-            padding-top: 1em;
+            border-bottom: #a6a6a6 3px solid;
+            border-right: #a6a6a6 2px solid;
+            padding-top: 0.2em;
             padding-left: 1em;
             border-radius: 1em;
             cursor: move;
         }
         .user-card img {
             border-radius: 50%;
-            max-width: 70%;
-            height: auto;            
+            max-width: 80%;
+            height: auto;
+            padding-top: 1em;            
         }
         .user-card button {
             cursor: pointer;
@@ -68,6 +73,14 @@ template.innerHTML = `
             color: #eb9b13;
             text-decoration: none;
         }
+
+        @media only screen and (max-width: 1080px) and (orientation:portrait) {
+            .user-card {
+              height: 300px;
+              width: 700px
+            }
+        }
+
 
     </style>
     
@@ -98,7 +111,7 @@ export default class UserCard extends HTMLElement {
         this.eventName = 'onSelectCard';
 
         /**
-         * drag and drop support
+         * preparing drag and drop support
          */
         this.addEventListener("dragstart", this.__dragStart.bind(this));
         this.addEventListener("dragend", this.__dragEnd.bind(this));

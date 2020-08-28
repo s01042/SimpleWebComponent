@@ -45,3 +45,7 @@ There is a growing number of ready to use web components and there are framework
 
 # Try out the example web component
 Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pages, where a little demo is hosted.
+
+# Todo
+
+Make it drag and drop ready, espacially for mobile devices. Read [here](https://justinribeiro.com/chronicle/2020/07/14/handling-web-components-and-drag-and-drop-with-event.composedpath/) and [here](https://web.dev/drag-and-drop/)

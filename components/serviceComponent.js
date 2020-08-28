@@ -50,7 +50,7 @@ export default class ServiceComponent {
     /**
      * Immutable Objects!
      * 
-     * at first sight this implementation might see a littel bit strange, but if 
+     * at first sight this implementation might see a little bit strange, but if 
      * you think about data binding in web components and also for example in React
      * then you will get a better understandig for what is going on here and why 
      * i do it this way.
