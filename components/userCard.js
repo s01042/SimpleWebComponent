@@ -35,8 +35,6 @@ template.innerHTML = `
 
         .user-card {
   
-            min-width: 500px;
-            min-height: 200px;
             font-family: 'Arial', sans-serif;
             background: #6d7d8a;            
             display: grid;
@@ -47,6 +45,8 @@ template.innerHTML = `
             border-right: #a6a6a6 2px solid;
             padding-top: 0.2em;
             padding-left: 1em;
+            padding-right: 1em;
+            padding-bottom: 1em;
             border-radius: 1em;
             cursor: move;
         }
