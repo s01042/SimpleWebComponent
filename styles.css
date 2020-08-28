@@ -8,6 +8,8 @@ body {
     background-color: #2a3e4d;
     font-family: 'Arial', sans-serif;
     font-size: 16px;
+    margin: 0 auto;
+    padding: 50px;
 }
 
 /*
@@ -20,8 +22,8 @@ body {
 */
 
 #parent {
-    margin: 0 auto;
     background-color: rebeccapurple;
+    padding: 50px;
 }
 
 #container {
