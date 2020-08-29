@@ -9,12 +9,12 @@ body {
     font-family: 'Arial', sans-serif;
     font-size: 16px;
     margin: 0 auto;
-    padding: 50px;
+    padding: 20px;
 }
 
 #parent {
     background-color: rebeccapurple;
-    padding: 50px;
+    padding: 20px;
     min-width: 800px;
 }
 
@@ -42,7 +42,7 @@ h1 {
 
 @media only screen and (max-width: 1080px) and (orientation: portrait){
     body {
-        font-size: 24px;
+        font-size: 32px;
     }
     #container {
         background-color: sienna;
