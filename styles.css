@@ -42,7 +42,7 @@ h1 {
 
 @media only screen and (max-width: 1080px) and (orientation: portrait){
     body {
-        font-size: 32px;
+        font-size: 2rem;
     }
     #container {
         background-color: sienna;

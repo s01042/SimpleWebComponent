@@ -30,11 +30,10 @@ template.innerHTML = `
         .user-card h2 {
             color: #1d405c;
             cursor: pointer;
-            size: 2em
+            size: 2rem
         }
 
         .user-card {
-  
             background: #6d7d8a;            
             display: grid;
             grid-template-columns: 1fr 2fr;
