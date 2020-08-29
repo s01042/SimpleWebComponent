@@ -35,12 +35,11 @@ template.innerHTML = `
 
         .user-card {
   
-            font-family: 'Arial', sans-serif;
             background: #6d7d8a;            
             display: grid;
             grid-template-columns: 1fr 2fr;
-            grid-gap: 10px;
-            margin-bottom: 15px;
+            grid-gap: 1em;
+            margin-bottom: 1em;
             border-bottom: #a6a6a6 3px solid;
             border-right: #a6a6a6 2px solid;
             padding-top: 0.2em;
@@ -62,8 +61,7 @@ template.innerHTML = `
             color: #fff;
             border: 0;
             border-radius: 5px;
-            padding-top: 5px;
-            padding-rigth: 20px;
+            padding: 0.5em;
         }
         .user-card p {
             line-height: 0.7;
