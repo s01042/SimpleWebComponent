@@ -41,10 +41,9 @@ h1 {
     position: -webkit-sticky; /* Safari */
     position: sticky;
     top: 0;
-    padding-bottom: 1rem;
-    padding-top: 1rem;
     background-color: #2a3e4d;
     z-index: 1;
+    padding: 1rem;
 }
 
 #floatingButton {

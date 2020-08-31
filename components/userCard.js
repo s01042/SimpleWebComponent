@@ -74,7 +74,7 @@ template.innerHTML = `
         }
         @media only screen and (max-width: 1080px) and (orientation: portrait){
             .user-card {
-                max-width: 40rem;
+                max-width: 38rem;
             }
         }
 
