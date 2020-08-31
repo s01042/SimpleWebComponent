@@ -27,10 +27,13 @@ const template = document.createElement('template')
  */
 template.innerHTML = `
     <style>
+        ::root {
+            font-size: 16px;
+        }
         .user-card h2 {
             color: #1d405c;
             cursor: pointer;
-            size: 2rem
+            size:1.5rem
         }
 
         .user-card {
@@ -74,7 +77,10 @@ template.innerHTML = `
         }
         @media only screen and (max-width: 1080px) and (orientation: portrait){
             .user-card {
-                max-width: 38rem;
+                max-width: 27rem;
+            }
+            .html {
+                size: 1.8rem
             }
         }
 

@@ -34,6 +34,7 @@ h1 {
     */
     color: var(--theme-colour);
     text-align: center;
+    font-size: 1.5rem;
     /* background: red; */
 }
 
@@ -43,7 +44,7 @@ h1 {
     top: 0;
     background-color: #2a3e4d;
     z-index: 1;
-    padding: 1rem;
+    padding: 0 0 0 1rem;
 }
 
 #floatingButton {
@@ -53,11 +54,8 @@ h1 {
 }
 
 @media only screen and (max-width: 1080px) and (orientation: portrait){
-    body {
-        font-size: 1.6rem;
-    }
     #container {
-        /* background-color: sienna; */
+        background-color: sienna; 
     }
     #header {
         padding: 0.05rem;

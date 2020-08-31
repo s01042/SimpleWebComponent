@@ -51,8 +51,8 @@ template.innerHTML = `
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 250px;
-            width: 120px;
+            height: 16rem;
+            width: 8rem;
             fontsize: 1em;
             /* background: yellow; */
         }
@@ -67,11 +67,8 @@ template.innerHTML = `
             display: none;
             flex-direction: column;
             position: absolute;
-            bottom: 30px;
             align-items: center;
-            height: 200px;
-            width: 80px;
-            padding-top: 10px;
+            /* background: red; */
         }
 
         #hiddenContainer.slidein {
@@ -93,6 +90,7 @@ template.innerHTML = `
             font-size: 1rem;
             border-radius: 50%;
             margin-top: 10px;
+            border: none;
         }
         @media only screen and (max-width: 1080px) and (orientation: portrait){
             .btn-line {
