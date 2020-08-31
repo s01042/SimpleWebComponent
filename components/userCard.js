@@ -42,17 +42,17 @@ template.innerHTML = `
             border-bottom: #a6a6a6 3px solid;
             border-right: #a6a6a6 2px solid;
             padding-top: 0.2em;
-            padding-left: 1em;
-            padding-right: 1em;
-            padding-bottom: 1em;
-            border-radius: 1em;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            padding-bottom: 1rem;
+            border-radius: 1rem;
             cursor: move;
         }
         .user-card img {
-            border-radius: 50%;
-            max-width: 80%;
+            /* border-radius: 50%; */
+            max-width: 90%;
             height: auto;
-            padding-top: 1em;            
+            padding-top: 1rem;            
         }
         .user-card button {
             cursor: pointer;
@@ -60,7 +60,8 @@ template.innerHTML = `
             color: #fff;
             border: 0;
             border-radius: 5px;
-            padding: 0.5em;
+            padding: 0.5rem;
+            font-size: 1.0em;
         }
         .user-card p {
             line-height: 0.7;
