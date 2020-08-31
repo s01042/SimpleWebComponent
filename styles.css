@@ -59,4 +59,7 @@ h1 {
     #container {
         /* background-color: sienna; */
     }
+    #header {
+        padding: 0.05rem;
+    }
 }

@@ -88,12 +88,21 @@ template.innerHTML = `
             cursor: pointer;
             background: var(--theme-colour);
             color: #fff;
-            border: 0;
             width: 5rem;
             height: 5rem;
             font-size: 1rem;
             border-radius: 50%;
             margin-top: 10px;
+        }
+        @media only screen and (max-width: 1080px) and (orientation: portrait){
+            .btn-line {
+                background: black;
+            }
+            #hiddenContainer button {
+                border-style: solid;
+                border-width: 3px;
+                border-color: black;    
+            }
         }
     </style>
 
