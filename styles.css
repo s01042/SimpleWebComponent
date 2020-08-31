@@ -18,7 +18,7 @@ html {
 #parent {
     /* background-color: rebeccapurple; */
     padding: 1rem;
-    min-width: 800px;
+    /*min-width: 1000px;*/
 }
 
 #container {
@@ -44,17 +44,18 @@ h1 {
     padding-bottom: 1rem;
     padding-top: 1rem;
     background-color: #2a3e4d;
+    z-index: 1;
 }
 
 #floatingButton {
     position: fixed;
-    right: 10px;
-    bottom: 20px;
+    right: 1px;
+    bottom: 2rem;
 }
 
 @media only screen and (max-width: 1080px) and (orientation: portrait){
     body {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
     #container {
         /* background-color: sienna; */
