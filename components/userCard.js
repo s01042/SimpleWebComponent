@@ -47,6 +47,7 @@ template.innerHTML = `
             padding-bottom: 1rem;
             border-radius: 1rem;
             cursor: move;
+            max-width: 30rem;
         }
         .user-card img {
             /* border-radius: 50%; */
@@ -70,6 +71,11 @@ template.innerHTML = `
         .user-card a {
             color: #eb9b13;
             text-decoration: none;
+        }
+        @media only screen and (max-width: 1080px) and (orientation: portrait){
+            .user-card {
+                max-width: 45rem;
+            }
         }
 
     </style>

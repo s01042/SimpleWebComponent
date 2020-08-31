@@ -8,7 +8,7 @@ body {
     background-color: #2a3e4d;
     font-family: 'Arial', sans-serif;
     margin: 0 auto;
-    padding: 20px;
+    /* padding: 1rem; */
 }
 
 html {
@@ -16,16 +16,16 @@ html {
 }
 
 #parent {
-    background-color: rebeccapurple;
-    padding: 20px;
+    /* background-color: rebeccapurple; */
+    padding: 1rem;
     min-width: 800px;
 }
 
 #container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* center the card items in the container */
-    background-color: salmon;
+    /* align-items: center; /* center the card items in the container */
+    /* background-color: salmon; */
 }
 
 h1 {
@@ -34,7 +34,16 @@ h1 {
     */
     color: var(--theme-colour);
     text-align: center;
-    background: red;
+    /* background: red; */
+}
+
+#header {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    background-color: #2a3e4d;
 }
 
 #floatingButton {
@@ -45,9 +54,9 @@ h1 {
 
 @media only screen and (max-width: 1080px) and (orientation: portrait){
     body {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
     #container {
-        background-color: sienna;
+        /* background-color: sienna; */
     }
 }

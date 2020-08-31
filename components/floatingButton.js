@@ -54,7 +54,7 @@ template.innerHTML = `
             height: 250px;
             width: 120px;
             fontsize: 1em;
-            background: yellow;
+            /* background: yellow; */
         }
 
         #menu-btn {
