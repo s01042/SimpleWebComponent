@@ -42,7 +42,7 @@ h1 {
     position: sticky;
     top: 0;
     background-color: #2a3e4d;
-    z-index: 1;
+    /* z-index: 1; */
     padding: 0 0 0 1rem;
 }
 

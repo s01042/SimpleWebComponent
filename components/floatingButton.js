@@ -8,7 +8,7 @@ template.innerHTML = `
         }
 
         #menu-btn {
-            z-index: 3;
+            z-index: 1;
             cursor: pointer;
         }
 
@@ -55,6 +55,7 @@ template.innerHTML = `
             width: 8rem;
             fontsize: 1em;
             /* background: yellow; */
+            z-index: 1;
         }
 
         #menu-btn {
@@ -87,12 +88,12 @@ template.innerHTML = `
             color: #fff;
             width: 5rem;
             height: 5rem;
-            font-size: 1rem;
+            /* font-size: 1rem; */
             border-radius: 50%;
             margin-top: 10px;
             border: none;
         }
-        @media only screen and (max-width: 1080px) and (orientation: portrait){
+        @media only screen and (orientation: portrait){
             .btn-line {
                 background: black;
             }
