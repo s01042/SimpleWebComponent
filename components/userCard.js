@@ -30,7 +30,6 @@ template.innerHTML = `
         .user-card h2 {
             color: #1d405c;
             cursor: pointer;
-            /* size:1.5rem */
         }
 
         .user-card {
@@ -50,7 +49,6 @@ template.innerHTML = `
             max-width: 25rem;
         }
         .user-card img {
-            /* border-radius: 50%; */
             max-width: 90%;
             height: auto;
             padding-top: 1rem;            
@@ -72,7 +70,7 @@ template.innerHTML = `
             color: #eb9b13;
             text-decoration: none;
         }
-        @media only screen and (max-width: 1080px) and (orientation: portrait){
+        @media only screen and (orientation: portrait){
             .user-card {
                 max-width: 27rem;
                 background: #6d7dff;
