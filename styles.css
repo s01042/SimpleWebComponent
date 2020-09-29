@@ -35,7 +35,6 @@ h1 {
     color: var(--theme-colour);
     text-align: center;
     font-size: 1.5rem;
-    /* background: red; */
 }
 
 #header {
@@ -53,9 +52,12 @@ h1 {
     bottom: 2rem;
 }
 
-@media only screen and (max-width: 1100px) and (orientation: portrait){
+@media only screen and (orientation: portrait){
     html {
-        font-size: 20px;
+        font-size: 24px;
+    }
+    h1 {
+        background: red; 
     }
     #container {
         background-color: sienna; 
