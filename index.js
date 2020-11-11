@@ -15,7 +15,7 @@ import UserCard from './components/userCard.js'
 import ServiceComponent from './components/serviceComponent.js'
 import AppConfig from './components/appConfig.js'
 
-const myAppConfig = new AppConfig(true) //runs in DEV environment?
+const myAppConfig = new AppConfig(false) //runs in DEV environment?
 const myServiceComponent = new ServiceComponent(myAppConfig)
 
 /**
@@ -118,6 +118,9 @@ function installMenuEventHandler() {
             .catch (error => {
                 notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
             })               
+    })
+    menu.addEventListener('onAppConfig', (e) => {
+        notify (`handle App Config`, 'info', 'check2-circle', 5000)
     })
 }
 

@@ -51,7 +51,7 @@ template.innerHTML = `
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 16rem;
+            height: 21rem;
             width: 8rem;
             fontsize: 1em;
             /* background: yellow; */
@@ -67,7 +67,7 @@ template.innerHTML = `
         #hiddenContainer {
             display: none;
             flex-direction: column;
-            position: absolute;
+            /* position: absolute; */
             align-items: center;
             /* background: red; */
         }
@@ -93,6 +93,7 @@ template.innerHTML = `
             margin-top: 10px;
             border: none;
         }
+        /*
         @media only screen and (orientation: portrait){
             .btn-line {
                 background: black;
@@ -103,12 +104,14 @@ template.innerHTML = `
                 border-color: black;    
             }
         }
+        */
     </style>
 
     <div id='container'>
         <div id='hiddenContainer'>
             <button id='recordNew'>New</button>
             <button id='sendData'>Send</button>
+            <button id='appConfig'>Config</button>
         </div>
         <div id='menu-btn'>
             <div class='btn-line'></div>           
@@ -140,7 +143,7 @@ export default class FloatingButton extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true))
 
         /**
-         * here we declare two custom events for this new component
+         * here we declare custom events for this new component
          * we will fire this custom events from our component when the
          * corresponding buttons are pressed
          * others can bind to this events and react accordingly
@@ -150,6 +153,10 @@ export default class FloatingButton extends HTMLElement {
             cancelable: false,
         })
         this.onSendClicked = new CustomEvent('onSend', {
+            bubbles: true,
+            cancelable: false,
+        })
+        this.onAppConfigClicked = new CustomEvent('onAppConfig', {
             bubbles: true,
             cancelable: false,
         })
@@ -167,6 +174,9 @@ export default class FloatingButton extends HTMLElement {
         })
         this.shadowRoot.querySelector('#sendData').addEventListener('click', (e) =>{
             this.dispatchEvent(this.onSendClicked)
+        })
+        this.shadowRoot.querySelector('#appConfig').addEventListener('click', (e) => {
+            this.dispatchEvent(this.onAppConfigClicked)
         })
     }
 
