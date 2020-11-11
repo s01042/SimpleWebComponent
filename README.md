@@ -49,3 +49,11 @@ Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pa
 # Todo
 
 Make it drag and drop ready, espacially for mobile devices. Read [here](https://justinribeiro.com/chronicle/2020/07/14/handling-web-components-and-drag-and-drop-with-event.composedpath/) and [here](https://web.dev/drag-and-drop/)
+
+# Remarks
+
+For local DEV environment i installed a CORS Proxy.
+``` cmd
+cd \My Library\DEV\cors-anywhere
+node .\server.js
+```

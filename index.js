@@ -15,7 +15,7 @@ import UserCard from './components/userCard.js'
 import ServiceComponent from './components/serviceComponent.js'
 import AppConfig from './components/appConfig.js'
 
-const myAppConfig = new AppConfig(false) //runs in DEV environment?
+const myAppConfig = new AppConfig(true) //runs in DEV environment?
 const myServiceComponent = new ServiceComponent(myAppConfig)
 
 /**
@@ -28,17 +28,32 @@ function myEventHandler(elementKey) {
         .then( map => {
             let selectedElement = map.get(elementKey)
             if (selectedElement) {
-                let textToDisplay = new Date(selectedElement.WeatherData.created)
-                alert(`weather data created: '${textToDisplay.toLocaleString()}'`)
+                let textToDisplay = new Date(selectedElement.WeatherData.created).
+                    toLocaleTimeString("de-DE",  
+                        {
+                            month: '2-digit',
+                            day: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }
+                    ) + " Uhr"
+                const dialog = document.getElementById("dialog")
+                const closeButton = dialog.querySelector('sl-button[slot="footer"]')
+                closeButton.addEventListener ('click', () => {dialog.hide()})
+                dialog.label = 'Timestamp of weather data'
+                document.getElementById("content").innerHTML = `captured by weather station on: '${textToDisplay}'`
+                dialog.show()
+                // alert(`weather data created: '${textToDisplay.toLocaleString()}'`)
             } else {
                 alert(`no more data available for item with id '${elementKey}'`)
             }        
         })
 }
 
+
 function init() {
     installMenuEventHandler()
-
     myServiceComponent.getLocallyStoredData().then( dataMap => {
         //todo iterate over the map and build card components dynamically
         dataMap.forEach( item => {
@@ -60,8 +75,32 @@ function init() {
     userCards.forEach( userCard => {
         userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
     })
-
 }
+
+
+// Always escape HTML for text arguments!
+function escapeHtml(html) {
+    const div = document.createElement('div');
+    div.textContent = html;
+    return div.innerHTML;
+}  
+
+// Custom function to emit toast notifications (shoelace alert web component)
+function notify(message, type = 'primary', icon = 'info-circle', duration = 3000) {
+    const alert = Object.assign(document.createElement('sl-alert'), {
+        type: type,
+        closable: true,
+        duration: duration,
+        innerHTML: `
+        <sl-icon name="${icon}" slot="icon"></sl-icon>
+        ${escapeHtml(message)}
+        `
+    });
+
+    document.body.append(alert);
+    return alert.toast();
+}
+
 
 /**
  * we install the event handler for the floatingButton component
@@ -72,8 +111,13 @@ function installMenuEventHandler() {
         onNewEventHandler()
     })
     menu.addEventListener('onSend', (e) => {
-        let id = myServiceComponent.generateGUID()
-        alert(`will later be implemented to send data via REST: ${id}`)
+        myServiceComponent.sendData()
+            .then (file => {
+                notify (`successfully saved your data on Google Drive`, 'info', 'check2-circle', 5000)
+            }) 
+            .catch (error => {
+                notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
+            })               
     })
 }
 
@@ -109,9 +153,11 @@ async function onNewEventHandler() {
             dataObject.ID,
             true
         )
+        //todo: notify?
     }
     catch( e ) {
-        alert(`oops, something went wrong: ${e}`)        
+        // alert(`oops, something went wrong: ${e}`)        
+        notify (`oops, something went wrong: '${e.message}'`, 'warning', 'exclamation-triangle', 4000)
     }
 }
 
@@ -156,7 +202,10 @@ function stackNewUserCard(geolocation, nearestCity, singleDayData, objectID, onT
     userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
     if (onTop) {
         contentDiv.insertBefore(userCard, contentDiv.firstChild)
+        contentDiv.firstChild.scrollIntoView(false)
+        userCard.blink()
     } else {
+        userCard.toggleInfo()
         contentDiv.appendChild(userCard)
     }
 

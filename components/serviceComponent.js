@@ -1,5 +1,6 @@
+
 /**
- * this is a simple serviceComponent Class
+ * this is a serviceComponent Class
  * in it i will bundle all my data access functionality eg. 
  * fetch data from web service, post data to web service,
  * persist data locally etc.
@@ -8,11 +9,215 @@ export default class ServiceComponent {
 
     appConfig = null
     dataSet = null
-    myLocalStorage = null
+    myLocalStorage = null    
+    gapi = null                     // google api
+    googleFileID = null
 
     constructor(theAppConfig) {
         this.appConfig = theAppConfig
+        this.googleFileID = localStorage.getItem('s01042.GPSLogger.v1.GoogleFileID') 
+
+        /**
+         * handleClientLoad is called by the script.onload event handler
+         * in loadGoogleDriverAPI. the this context will change by doing so
+         * and therefore handleClientLoad would normally have no access to
+         * the this context of the ServiceComponent class. to avoid this 
+         * problem we bind the this context here explicitly to the 
+         * handleClientLoad method
+         */
+        this.handleClientLoad = this.handleClientLoad.bind(this)
+        if(this.gapi === null) {
+            this.loadGoogleDriveAPI()
+        }
     }
+
+    /**
+     * this is how sendData does work:
+     * if i use this WebApp on different devices, every device will collect 
+     * its own set of data and store them locally in the local storage on the device.
+     * to avoid the concurrent overwriting of this data in one single google drive file every device
+     * has to store its own data in a google drive file that is "owned" by the WebApp instance.
+     * that's why every WebApp instance will deal with its own google drive file id.
+     * in the first attempt of storing data on google drive there will be no such google drive 
+     * file id owned by the app. that forces the WebApp to create a new google drive file. 
+     * in response to that event the WebApp will receive a google file id for this newly created file 
+     * and will store it in local storage for later use. if a file id is present the WebApp will use updateFile 
+     * to override the file content of its "owned file" on google drive with the new data.
+     */
+    async sendData() {
+        //todo: check if we are still logged into google
+        let self = this     //preserve the this context
+        const promise = new Promise (function (resolve, reject) {
+            //if there is no googleFileID we create a new file 
+            if (self.googleFileID == null) {
+                this.createNewFile()
+                    .then ( googleFileID => {
+                        //lets ref and store the newly created DocId for further use
+                        self.googleFileID = googleFileID
+                        localStorage.setItem('s01042.GPSLogger.v1.GoogleFileID', googleFileID)
+                        self.updateFile (googleFileID)
+                            .then ( file => {
+                                resolve (file)
+                            })
+                            .catch ( error => {
+                                reject (error)
+                            })
+                    })
+                    .catch (error => {
+                        reject (error)
+                    })
+            } else {
+                //todo: check if file with id still exists in google drive
+                self.updateFile(self.googleFileID)
+                    .then ( file => {
+                        resolve (file)
+                    })
+                    .catch (error => {
+                        reject (error)
+                    })
+            }
+        })
+        return promise
+    }
+
+    /**
+     * 
+     * @param {*} googleFileID the google file id of the document to update
+     * 
+     * this is a littel bit tricky, because we want to update some document metadata 
+     * (especially the document description) and the document content at the same time. 
+     * therefore we must build a multipart body.
+     * see https://dev.to/arnabsen1729/using-google-drive-api-v3-to-upload-a-file-to-drive-using-react-4loi
+     */
+    async updateFile (googleFileID) {
+
+        let self = this
+        const promise = new Promise (function(resolve, reject) {
+
+            //this is the service end point: https://www.googleapis.com/upload/drive/v3/files/fileId
+            const serviceUrl = 'https://www.googleapis.com/upload/drive/v3/files/' + googleFileID
+            let timeStamp = Date.now()
+            
+            const boundary='s01042.GPSLogger.v1'
+            const delimiter = "\r\n--" + boundary + "\r\n";
+            const close_delim = "\r\n--" + boundary + "--";
+
+            var fileData= localStorage.getItem('s01042.GPSLogger.v1')
+            var contentType='application/json'
+            var metadata = {
+                'description': timeStamp,
+                'mimeType': contentType
+            };
+
+            /** here it is important, that the metadata comes first, before the content data */
+            let multipartRequestBody =
+            delimiter +
+            'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+            JSON.stringify(metadata) +
+            delimiter +
+            'Content-Type: ' + contentType + '\r\n\r\n' +
+            fileData+'\r\n'+
+            close_delim;
+
+            var request = self.gapi.client.request({
+                'path': serviceUrl,
+                'method': 'PATCH',
+                'params': {'uploadType': 'multipart'},
+                'headers': {
+                  'Content-Type': 'multipart/related; boundary=' + boundary + ''
+                },
+                'body': multipartRequestBody});
+            request.execute (function (result) {
+                if (result.error) {
+                    reject (result.error)
+                } else {
+                    resolve (result)
+                }
+            })
+        })
+        return promise
+    }
+
+
+    /**
+     * create a new empty file on google drive
+     */
+    async createNewFile() {
+        
+        const selft = this
+        let timestamp = Date.now()
+        let promise = new Promise (function (resolve, reject) {
+            let fileMetaData = {
+                name: "GPSLoggerData_" + timestamp + ".json",
+                mimeType: 'text/json',
+            }
+            self.gapi.client.drive.files.create({
+                resource: fileMetaData,
+                fields: 'id'
+            }).then (response => {
+                resolve (response.result.id)
+            }).catch (response => {
+                reject (response.result.error)
+            })    
+        })
+        return promise
+    }
+
+    /**
+     * here i load the google drive api js file
+     * the onload binding is used to interact with the api when the js file is 
+     * completly loaded and ready to use
+     */
+    loadGoogleDriveAPI() {
+        let head = document.head
+        let script = document.createElement('script')
+        script.type = 'text/javascript'
+        script.src = 'https://apis.google.com/js/api.js'
+        // Then bind the event to the callback function.
+        // There are several events for cross browser compatibility.
+        script.onreadystatechange = this.handleClientLoad
+        script.onload = this.handleClientLoad
+        // Fire the loading
+        head.appendChild(script);    
+    }
+
+    /**
+     * if this event handler is called, the google api.js file is completly loaded
+     * and ready to use and we will have access to the top level object gapi
+     * let's bind this object for further use to our class local gapi property 
+     */
+    handleClientLoad() {
+        this.gapi = gapi
+        this.initGapi()
+        console.log(`gapi is loaded '${this.gapi}', initialized and ready to use`)
+    }
+
+    /**
+     * first we need to init the gapi client
+     */
+    initGapi() {
+        let that = this     //preserve the this context
+        this.gapi.load('client:auth2', function() {
+            /** Ready to make a call to gapi.auth2.init */
+            that.gapi.client.init({
+                apiKey: that.appConfig.ApiKey,
+                clientId: that.appConfig.ClientID,
+                discoveryDocs: that.appConfig.DiscoveryDocs,
+                scope: that.appConfig.Scopes
+            }).then( function() {
+                //handle the initial sign-in state here
+                const initialSignedIn = that.gapi.auth2.getAuthInstance().isSignedIn.get()
+                //that.gapi.auth2.getAuthInstance().signOut()
+                //that.gapi.auth2.getAuthInstance().isSignedIn.listen( (singedIn) => {
+                if(! initialSignedIn ) {
+                    that.gapi.auth2.getAuthInstance().signIn()
+                }
+            }, (error) => {
+                console.log(JSON.stringify(error, null, 2))
+            })
+        })
+    }
+
 
     /**
      * this is not the perfect solution!
@@ -66,7 +271,7 @@ export default class ServiceComponent {
      * Immutable objects. 
      * @param {*} theDataObject 
      */
-    stackNewDataObject(theDataObject) {
+    async stackNewDataObject(theDataObject) {
 
         //preserve the this context because inside the
         //promise constructor this context will change

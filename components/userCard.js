@@ -11,10 +11,7 @@
  * from here. (see index.js and index.html)
  * 
  * I'm using a template for my web component 
- * 
- * todo: add a visual representation for new userCard objects 
- * eg. some flash of the background color
- * 
+ *  
  */
 const template = document.createElement('template')
 
@@ -47,6 +44,9 @@ template.innerHTML = `
             border-radius: 1rem;
             cursor: move;
             max-width: 25rem;
+            // animation: blinkingBorder 1s ;
+            // animation-delay: 1s;
+            // animation-iteration-count: 3;
         }
         .user-card img {
             max-width: 90%;
@@ -60,10 +60,9 @@ template.innerHTML = `
             border: 0;
             border-radius: 5px;
             padding: 0.5rem;
-            font-size: 1.0rem;
         }
         .user-card p {
-            line-height: 0.7;
+            line-height: 0.5;
             color: white;
         }
         .user-card a {
@@ -75,6 +74,27 @@ template.innerHTML = `
                 background: #6d7dff;
             }
         }
+        @keyframes blinkingBorder{
+            0%		{ 
+                border-bottom: #ffff40 3px solid;
+                border-right: #ffff40 2px solid;
+            }
+            25%		{ 
+                border-bottom: #ffe400 3px solid;
+                border-right: #ffe400 2px solid;
+            }
+            50%		{ 
+                border-bottom: #ffa600 3px solid;
+                border-right: #ffa600 2px solid;
+            }
+            75%		{ 
+                border-bottom: #a6afa0 3px solid;
+                border-right: #a6afa0 2px solid;
+            }
+            100%	{ 
+                border-bottom: #a6a6a6 3px solid;
+                border-right: #a6a6a6 2px solid;
+            }
 
     </style>
     
@@ -87,7 +107,7 @@ template.innerHTML = `
                 <p><slot name='city' /></p>
                 <p><slot name='temperature' /></p>
             </div>
-            <button id='toggleInfo'>hide info</button>
+            <button id='toggleInfo'>hide details</button>
         </div>
     </div>
 `
@@ -144,13 +164,18 @@ export default class UserCard extends HTMLElement {
 
         if (this.showInfo) {
             info.style.display = 'block'
-            button.innerText = 'hide info'
+            button.innerText = 'hide details'
         } else {
             info.style.display = 'none'
-            button.innerText = 'show info'
+            button.innerText = 'show details'
         }
     }
 
+    blink() {
+        this.shadowRoot.querySelector('.user-card').setAttribute(
+            "style", "animation: blinkingBorder 1s; animation-delay: 0.2s; animation-iteration-count: 3"
+        ) 
+    }
 
     /**
      * i switched to customEvents to inform the host about 

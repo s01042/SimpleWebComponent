@@ -1,30 +1,48 @@
+/**
+*   customizing the color theme of shoelace web components 
+*   to match my own color theme
+*/
+:root {
+    --sl-input-border-radius-medium: 5px;
+    --sl-color-info-50: var(--sl-color-info-30);    /*overwriting the default info theme with a darker one*/ 
+}
+
+.dialog-overview::part(panel) {
+    background-color: #6d7d8a;
+    border-bottom: #a6a6a6 3px solid;
+    border-right: #a6a6a6 2px solid;
+    border-radius: 1rem;
+    color: white;
+}
+
+.dialog-overview::part(title) {
+    color: #1d405c;
+    font-weight: bold;
+}
+/*  end of customizing the shoelace color theme */
+
+html {
+    font-size: 14px;
+}
+
 body {
     /*
     *this is an user defined style or a custom 
     *css property. this prop will always reach the 
     *shadow dom!
     */
-    --theme-colour: #7a7a7a; 
+    /* --theme-color: #525050; */
+    --theme-color: #93908D;
+    --box-shadow: #6d7d8a;
     background-color: #2a3e4d;
     font-family: 'Arial', sans-serif;
     margin: 0 auto;
-    /* padding: 1rem; */
-}
-
-html {
-    font-size: 16px; /* this is not necessary because 16px it is the default value */
-}
-
-#parent {
-    /* background-color: rebeccapurple; */
-    padding: 1rem;
-    /*min-width: 1000px;*/
 }
 
 #container {
     display: flex;
     flex-direction: column;
-    /* align-items: center; /* center the card items in the container */
+    align-items: center; /* center the card items in the container */
     /* background-color: salmon; */
 }
 
@@ -32,9 +50,8 @@ h1 {
     /*
     *here i use the user defined style
     */
-    color: var(--theme-colour);
+    color: var(--theme-color);
     text-align: center;
-    font-size: 1.5rem;
 }
 
 #header {
@@ -43,7 +60,8 @@ h1 {
     top: 0;
     background-color: #2a3e4d;
     /* z-index: 1; */
-    padding: 0 0 0 1rem;
+    padding-bottom: 1px;
+    padding-top: 1px;
 }
 
 #floatingButton {
