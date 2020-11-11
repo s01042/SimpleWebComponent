@@ -50,7 +50,7 @@ export default class ServiceComponent {
         const promise = new Promise (function (resolve, reject) {
             //if there is no googleFileID we create a new file 
             if (self.googleFileID == null) {
-                this.createNewFile()
+                self.createNewFile()
                     .then ( googleFileID => {
                         //lets ref and store the newly created DocId for further use
                         self.googleFileID = googleFileID
