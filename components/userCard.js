@@ -69,11 +69,13 @@ template.innerHTML = `
             color: #eb9b13;
             text-decoration: none;
         }
+        /*
         @media only screen and (orientation: portrait){
             .user-card {
                 background: #6d7dff;
             }
         }
+        */
         @keyframes blinkingBorder{
             0%		{ 
                 border-bottom: #ffff40 3px solid;
