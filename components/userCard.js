@@ -32,7 +32,7 @@ template.innerHTML = `
         .user-card {
             background: #6d7d8a;            
             display: grid;
-            grid-template-columns: 1fr 2fr;
+            grid-template-columns: 1fr 3fr;
             grid-gap: 1em;
             margin-bottom: 1em;
             border-bottom: #a6a6a6 3px solid;
@@ -49,9 +49,9 @@ template.innerHTML = `
             // animation-iteration-count: 3;
         }
         .user-card img {
-            max-width: 90%;
+            max-width: 100%;
             height: auto;
-            padding-top: 1rem;            
+            padding-top: 3rem;            
         }
         .user-card button {
             cursor: pointer;

@@ -15,7 +15,7 @@ import UserCard from './components/userCard.js'
 import ServiceComponent from './components/serviceComponent.js'
 import AppConfig from './components/appConfig.js'
 
-const myAppConfig = new AppConfig(false) //runs in DEV environment?
+const myAppConfig = new AppConfig(true) //runs in DEV environment?
 const myServiceComponent = new ServiceComponent(myAppConfig)
 
 /**
@@ -95,10 +95,10 @@ function notify(message, type = 'primary', icon = 'info-circle', duration = 3000
         <sl-icon name="${icon}" slot="icon"></sl-icon>
         ${escapeHtml(message)}
         `
-    });
+    })
 
-    document.body.append(alert);
-    return alert.toast();
+    document.body.append(alert)
+    return alert.toast()
 }
 
 
@@ -119,22 +119,32 @@ function installMenuEventHandler() {
                 notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
             })               
     })
-    menu.addEventListener('onAppConfig', (e) => {
-        // notify (`handle App Config`, 'info', 'check2-circle', 5000)
-        const configDialog = document.getElementById('config')
-        const saveButton = configDialog.querySelector('sl-button[type="primary"]')
-        const cancelButton = configDialog.querySelector('sl-button[type="secondary"]')
-        const apiKey = configDialog.querySelector('sl-input[name="apikey"]')
-        const clientID = configDialog.querySelector('sl-input[name="clientid"]')
-        saveButton.addEventListener ('click', () => {
-            configDialog.hide()
-            notify (`App Config will be saved: API Key ${apiKey.value}; ClientID ${clientID.value}`, 'info', 'check2-circle', 5000)
-        })
-        cancelButton.addEventListener ('click', () => {
-            configDialog.hide()
-        })
-        configDialog.show()
+    menu.addEventListener('onAppConfig', editAppConfig)
+}
+
+/**
+ * edit App Config
+ */
+function editAppConfig() {
+    const configDialog = document.getElementById('config')
+    const saveButton = configDialog.querySelector('sl-button[type="info"]')
+    const cancelButton = configDialog.querySelector('sl-button[type="secondary"]')
+    const apiKey = configDialog.querySelector('sl-input[name="apikey"]')
+    apiKey.value = myAppConfig.ApiKey
+    const clientID = configDialog.querySelector('sl-input[name="clientid"]')
+    clientID.value = myAppConfig.ClientID
+    saveButton.addEventListener ('click', () => {
+        configDialog.hide()
+        myAppConfig.ApiKey = apiKey.value
+        myAppConfig.ClientID = clientID.value
+        myServiceComponent.updateAppConfig()
+        notify (`App Config saved`, 'info', 'check2-circle', 5000)
     })
+    cancelButton.addEventListener ('click', () => {
+        configDialog.hide()
+    })
+    configDialog.show()
+
 }
 
 /**

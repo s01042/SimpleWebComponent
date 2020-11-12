@@ -15,6 +15,8 @@ export default class ServiceComponent {
 
     constructor(theAppConfig) {
         this.appConfig = theAppConfig
+        this.appConfig.ApiKey = localStorage.getItem ('s01042.GPSLogger.v1.ApiKey')
+        this.appConfig.ClientID = localStorage.getItem ('s01042.GPSLogger.v1.ClientID')
         this.googleFileID = localStorage.getItem('s01042.GPSLogger.v1.GoogleFileID') 
 
         /**
@@ -29,6 +31,11 @@ export default class ServiceComponent {
         if(this.gapi === null) {
             this.loadGoogleDriveAPI()
         }
+    }
+
+    updateAppConfig() {
+        localStorage.setItem ('s01042.GPSLogger.v1.ApiKey', this.appConfig.ApiKey)
+        localStorage.setItem ('s01042.GPSLogger.v1.ClientID', this.appConfig.ClientID)
     }
 
     /**
