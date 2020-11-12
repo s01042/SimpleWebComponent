@@ -37,6 +37,9 @@ template.innerHTML = `
         
         @keyframes slideout {
             0%  {top: -40px}
+            25% {top: 0px}
+            50% {top: 50px}
+            75% {top: 100px}
             100% {top: 200px}
         }
 
@@ -79,7 +82,7 @@ template.innerHTML = `
 
         #hiddenContainer.slideout {
             animation-name: slideout;
-            animation-duration: 300ms;
+            animation-duration: 1000ms;
         }
 
         #hiddenContainer button {

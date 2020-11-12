@@ -25,28 +25,31 @@
         <floating-button></floating-button>
     </div>
 
+    <!--
+        this dialog will show the weather data time stamp
+    -->
     <sl-dialog label="Dialog" class="dialog-overview" id="dialog">
         <p id="content">hier steht der Inhalt</p>
         <sl-button slot="footer" type="info">Close</sl-button>
     </sl-dialog>
-      
+    
+    <!--
+        dialog for config settings
+    -->
+    <sl-dialog label="Google API Configuration" class="dialog-overview" id="config">
+        <sl-input name="apikey" type="text" label="API Key"></sl-input>
+        <br>
+        <sl-input name="clientid" type="text" label="Client ID"></sl-input>
+        <br><br>
+        <sl-button-group slot="footer">
+            <sl-button type="secondary">Cancel</sl-button>
+            <sl-button type="primary">Save</sl-button>
+        </sl-button-group>
+    </sl-dialog>
 
-    <div class='alert-toast'>
-        <sl-alert type="info" duration="4000" closable>
-            <sl-icon slot="icon" name="check2-circle"></sl-icon>
-            <strong>Successfully saved</strong><br>
-            Your data has been updated on Google Drive.
-        </sl-alert>
-
-        <sl-alert type="warning" duration="4000" closable>
-            <sl-icon slot="icon" name="exclamation-triangle"></sl-icon>
-            <strong>Saving data failed</strong><br>
-            <p id="errorMsg">try again later</p>
-        </sl-alert>
-    </div>
     <div id='parent'>
         <div id="header">
-            <h1>GPS Data Logger V. 0.29</h1>
+            <h1>GPS Data Logger V. 0.3</h1>
         </div>
                 
         <div id='container'>

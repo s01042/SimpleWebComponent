@@ -120,7 +120,20 @@ function installMenuEventHandler() {
             })               
     })
     menu.addEventListener('onAppConfig', (e) => {
-        notify (`handle App Config`, 'info', 'check2-circle', 5000)
+        // notify (`handle App Config`, 'info', 'check2-circle', 5000)
+        const configDialog = document.getElementById('config')
+        const saveButton = configDialog.querySelector('sl-button[type="primary"]')
+        const cancelButton = configDialog.querySelector('sl-button[type="secondary"]')
+        const apiKey = configDialog.querySelector('sl-input[name="apikey"]')
+        const clientID = configDialog.querySelector('sl-input[name="clientid"]')
+        saveButton.addEventListener ('click', () => {
+            configDialog.hide()
+            notify (`App Config will be saved: API Key ${apiKey.value}; ClientID ${clientID.value}`, 'info', 'check2-circle', 5000)
+        })
+        cancelButton.addEventListener ('click', () => {
+            configDialog.hide()
+        })
+        configDialog.show()
     })
 }
 
@@ -208,7 +221,7 @@ function stackNewUserCard(geolocation, nearestCity, singleDayData, objectID, onT
         contentDiv.firstChild.scrollIntoView(false)
         userCard.blink()
     } else {
-        userCard.toggleInfo()
+        // userCard.toggleInfo()
         contentDiv.appendChild(userCard)
     }
 
