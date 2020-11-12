@@ -96,18 +96,6 @@ template.innerHTML = `
             margin-top: 10px;
             border: none;
         }
-        /*
-        @media only screen and (orientation: portrait){
-            .btn-line {
-                background: black;
-            }
-            #hiddenContainer button {
-                border-style: solid;
-                border-width: 3px;
-                border-color: black;    
-            }
-        }
-        */
     </style>
 
     <div id='container'>
