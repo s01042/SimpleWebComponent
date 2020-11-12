@@ -15,7 +15,7 @@ import UserCard from './components/userCard.js'
 import ServiceComponent from './components/serviceComponent.js'
 import AppConfig from './components/appConfig.js'
 
-const myAppConfig = new AppConfig(true) //runs in DEV environment?
+const myAppConfig = new AppConfig(false) //runs in DEV environment?
 const myServiceComponent = new ServiceComponent(myAppConfig)
 
 /**
