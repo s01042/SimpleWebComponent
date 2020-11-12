@@ -133,6 +133,8 @@ function editAppConfig() {
     apiKey.value = myAppConfig.ApiKey
     const clientID = configDialog.querySelector('sl-input[name="clientid"]')
     clientID.value = myAppConfig.ClientID
+    const fileID = configDialog.querySelector('sl-input[name="fileid"]')
+    fileID.value = myAppConfig.FileID
     saveButton.addEventListener ('click', () => {
         configDialog.hide()
         myAppConfig.ApiKey = apiKey.value

@@ -29,6 +29,8 @@ export default class AppConfig {
     // Authorization scopes required by the API; multiple scopes can be
     // included, separated by spaces.
     SCOPES = 'https://www.googleapis.com/auth/drive.file'
+    // the Google File ID 
+    FILE_ID = null
     
 
     /**
@@ -37,6 +39,14 @@ export default class AppConfig {
      */
     constructor(isRunningInDevEnvironment = false) {
         this.isRunningInDevEnvironment = isRunningInDevEnvironment
+    }
+
+    get FileID() {
+        return this.FILE_ID
+    }
+
+    set FileID (newFileID) {
+        this.FILE_ID = newFileID
     }
 
     get ClientID() {

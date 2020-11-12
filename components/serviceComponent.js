@@ -18,6 +18,7 @@ export default class ServiceComponent {
         this.appConfig.ApiKey = localStorage.getItem ('s01042.GPSLogger.v1.ApiKey')
         this.appConfig.ClientID = localStorage.getItem ('s01042.GPSLogger.v1.ClientID')
         this.googleFileID = localStorage.getItem('s01042.GPSLogger.v1.GoogleFileID') 
+        this.appConfig.FileID = this.googleFileID
 
         /**
          * handleClientLoad is called by the script.onload event handler
