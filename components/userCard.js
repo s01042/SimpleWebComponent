@@ -43,13 +43,13 @@ template.innerHTML = `
             padding-bottom: 1rem;
             border-radius: 1rem;
             cursor: move;
-            max-width: 25rem;
+            max-width: 22rem;
             // animation: blinkingBorder 1s ;
             // animation-delay: 1s;
             // animation-iteration-count: 3;
         }
         .user-card img {
-            max-width: 100%;
+            max-width: 90%;
             height: auto;
             padding-top: 3rem;            
         }

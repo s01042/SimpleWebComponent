@@ -20,11 +20,11 @@ export default class AppConfig {
      * IMPORTAND:   check https://console.developers.google.com/ for your security settings
      *              especially for Javascript Origin settings
      */
-    // Client ID and API key from the Developer Console
+    // your Client ID from the Google Developer Console goes here
     CLIENT_ID = null
-    // this is the API Key for my GPSLogger
+    // your API Key from the Google Developer Console goes here
     API_KEY = null
-    // Array of API discovery doc URLs for APIs used by the quickstart
+    // Array of API discovery doc URLs for APIs used by the GPSLogger
     DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"]
     // Authorization scopes required by the API; multiple scopes can be
     // included, separated by spaces.

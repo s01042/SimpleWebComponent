@@ -47,7 +47,7 @@ template.innerHTML = `
             width: 28px;
             height: 3px;
             margin: 0 0 5px 0;
-            background: var(--theme-color);
+            background: #525050;
         }
         
         #container {
@@ -87,7 +87,7 @@ template.innerHTML = `
 
         #hiddenContainer button {
             cursor: pointer;
-            background: var(--theme-color);
+            background: #525050;
             color: #fff;
             width: 5rem;
             height: 5rem;
