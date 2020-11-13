@@ -68,8 +68,9 @@ function init() {
     })
 
     /**
-     * here we iterate over the declarative inserted user-card components and 
+     * here we iterate over the DECLERATIVE inserted user-card components and 
      * bind the event handler for selecting and deleting a card
+     * THIS was only for testing purposes (see index.html line 102)
      */
     let userCards = document.querySelectorAll('user-card')
     userCards.forEach( userCard => {
@@ -85,22 +86,45 @@ function init() {
  * persist the updated data 
  * @param {*} eventDetails 
  */
-function handleOnDeleteEntry (eventDetails) {
-    const confirmationDialog = document.getElementById ('deleteConfirmation')
-    const yesButton = confirmationDialog.querySelector ('sl-button[type="info"]')
-    const noButton = confirmationDialog.querySelector ('sl-button[type="secondary"]')
-    noButton.addEventListener ('click', () => {confirmationDialog.hide()})
-    yesButton.addEventListener ('click', () => {
-        confirmationDialog.hide()
-        const contentDiv = document.getElementById('container')
-        let userCard = contentDiv.querySelector (`user-card[id="${eventDetails}"]`)
-        if (userCard != null) {
-            contentDiv.removeChild (userCard)
-            notify (`entry with ID ${eventDetails} deleted`)        
-        }
-    })
-    document.getElementById ('confirmationMessage').innerHTML = `are you sure you want to delete the item with id <br>'${eventDetails}'`
-    confirmationDialog.show()
+function handleOnDeleteEntry (entryID) {
+    myServiceComponent.getLocallyStoredData()
+        .then (map => {
+            let selectedElement = map.get (entryID)
+            if (selectedElement) {
+                let textToDisplay = new Date (selectedElement.Location.timestamp)
+                    .toLocaleTimeString ("de-DE",
+                        {
+                            month: '2-digit',
+                            day: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }
+                    ) + " Uhr"
+                const confirmationDialog = document.getElementById ('deleteConfirmation')
+                const yesButton = confirmationDialog.querySelector ('sl-button[type="info"]')
+                const noButton = confirmationDialog.querySelector ('sl-button[type="secondary"]')
+                noButton.addEventListener ('click', () => {confirmationDialog.hide()})
+                yesButton.addEventListener ('click', () => {
+                    confirmationDialog.hide()
+                    const contentDiv = document.getElementById('container')
+                    let userCard = contentDiv.querySelector (`user-card[id="${entryID}"]`)
+                    if (userCard != null) {
+                        contentDiv.removeChild (userCard)
+                        map.delete (entryID)
+                        if (myServiceComponent.persistDataLocally (map)) {
+                            notify (`entry with time stamp '${textToDisplay}' deleted`)
+                        }
+                        else {
+                            notify (`something went wrong`, 'warning', 'exclamation-triangle', 5000)
+                        }                            
+                                
+                    }
+                })
+                document.getElementById ('confirmationMessage').innerHTML = `are you sure you want to delete the item with time stamp <br><h2>'${textToDisplay}'</h2>`
+                confirmationDialog.show()            
+            }
+        })
 }
 
 

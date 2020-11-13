@@ -43,7 +43,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center; /* center the card items in the container */
-    padding-left: 1em
+    /* padding-left: 1em */
     /* background-color: salmon; */
 }
 
