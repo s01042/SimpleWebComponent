@@ -202,17 +202,30 @@ function editAppConfig() {
 /**
  * here i will use the syntactic sugar of await
  * because of this i have to sign this function as async
+ * 
+ * things to keep in mind:
+ *      will getGelocation works, if i'm offline? (maybe)
+ *      the web service calls will not work, if i'm offline
  */
 async function onNewEventHandler() {
     try {
+        let nearestCities = null
+        let weatherData = null
+        let singleDayWeatherData = null
+        /** getGeolocation should work in offline mode */
         let geolocation = await myServiceComponent.getGeolocation()
-        let nearestCities = await myServiceComponent.getNearestCities(geolocation)
-        let weatherData = await myServiceComponent.getWeatherFromWOEID(nearestCities[0].woeid)
-        let singleDayWeatherData = weatherData.consolidated_weather[0]
+        /**
+         * web service calls are only possible if we are online
+         */
+        if (navigator.onLine) {
+            nearestCities = await myServiceComponent.getNearestCities(geolocation)
+            weatherData = await myServiceComponent.getWeatherFromWOEID(nearestCities[0].woeid)    
+            singleDayWeatherData = weatherData.consolidated_weather[0]
+        } 
         //bundle the collected data to a new dataObject for local storage
         let dataObject = {
             Location: geolocation,
-            City: nearestCities[0],
+            City: (nearestCities) ? nearestCities[0] : null,
             WeatherData: singleDayWeatherData,
             ID: myServiceComponent.generateGUID()
         }
@@ -221,7 +234,7 @@ async function onNewEventHandler() {
                 //i can use this for displaying status infos in the gui
                 //about the async storage operation
                 if (myServiceComponent.persistDataLocally(result)) {
-                    console.dir(result)
+                    notify (`'${result.size}' elements in collection`, 'info', 'check2-circle', 8000)
                 } 
             })
         stackNewUserCard (

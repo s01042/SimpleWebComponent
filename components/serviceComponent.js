@@ -106,9 +106,9 @@ export default class ServiceComponent {
             const serviceUrl = 'https://www.googleapis.com/upload/drive/v3/files/' + googleFileID
             let timeStamp = Date.now()
             
-            const boundary='s01042.GPSLogger.v1'
-            const delimiter = "\r\n--" + boundary + "\r\n";
-            const close_delim = "\r\n--" + boundary + "--";
+            const boundary ='s01042.GPSLogger.v1'
+            const delimiter = "\r\n--" + boundary + "\r\n"
+            const close_delim = "\r\n--" + boundary + "--"
 
             var fileData= localStorage.getItem('s01042.GPSLogger.v1')
             var contentType='application/json'
@@ -119,13 +119,13 @@ export default class ServiceComponent {
 
             /** here it is important, that the metadata comes first, before the content data */
             let multipartRequestBody =
-            delimiter +
-            'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
-            JSON.stringify(metadata) +
-            delimiter +
-            'Content-Type: ' + contentType + '\r\n\r\n' +
-            fileData+'\r\n'+
-            close_delim;
+                delimiter +
+                'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+                JSON.stringify(metadata) +
+                delimiter +
+                'Content-Type: ' + contentType + '\r\n\r\n' +
+                fileData+'\r\n'+
+                close_delim;
 
             var request = self.gapi.client.request({
                 'path': serviceUrl,
