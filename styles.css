@@ -42,7 +42,7 @@ body {
 #container {
     display: flex;
     flex-direction: column;
-    align-items: left; /* center the card items in the container */
+    align-items: center; /* center the card items in the container */
     padding-left: 1em
     /* background-color: salmon; */
 }

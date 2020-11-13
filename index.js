@@ -69,12 +69,38 @@ function init() {
 
     /**
      * here we iterate over the declarative inserted user-card components and 
-     * bind the event handler for selecting a card
+     * bind the event handler for selecting and deleting a card
      */
     let userCards = document.querySelectorAll('user-card')
     userCards.forEach( userCard => {
         userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
+        userCard.addEventListener('onDeleteEntry', (e) => handleOnDeleteEntry (e.details))
     })
+}
+
+/**
+ * to delete an existing entry means
+ * remove the the web component from the dom
+ * remove the data entry from the data collection
+ * persist the updated data 
+ * @param {*} eventDetails 
+ */
+function handleOnDeleteEntry (eventDetails) {
+    const confirmationDialog = document.getElementById ('deleteConfirmation')
+    const yesButton = confirmationDialog.querySelector ('sl-button[type="info"]')
+    const noButton = confirmationDialog.querySelector ('sl-button[type="secondary"]')
+    noButton.addEventListener ('click', () => {confirmationDialog.hide()})
+    yesButton.addEventListener ('click', () => {
+        confirmationDialog.hide()
+        const contentDiv = document.getElementById('container')
+        let userCard = contentDiv.querySelector (`user-card[id="${eventDetails}"]`)
+        if (userCard != null) {
+            contentDiv.removeChild (userCard)
+            notify (`entry with ID ${eventDetails} deleted`)        
+        }
+    })
+    document.getElementById ('confirmationMessage').innerHTML = `are you sure you want to delete the item with id <br>'${eventDetails}'`
+    confirmationDialog.show()
 }
 
 
@@ -185,7 +211,7 @@ async function onNewEventHandler() {
     }
     catch( e ) {
         // alert(`oops, something went wrong: ${e}`)        
-        notify (`oops, something went wrong: '${e.message}'`, 'warning', 'exclamation-triangle', 4000)
+        notify (`oops, something went wrong: '${e.message}'`, 'warning', 'exclamation-triangle', 5000)
     }
 }
 
@@ -228,6 +254,7 @@ function stackNewUserCard(geolocation, nearestCity, singleDayData, objectID, onT
             `Temperature: ${Math.round(singleDayData.the_temp)} °C`
     })
     userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
+    userCard.addEventListener('onDeleteEntry', (e) => handleOnDeleteEntry(e.detail))
     if (onTop) {
         contentDiv.insertBefore(userCard, contentDiv.firstChild)
         contentDiv.firstChild.scrollIntoView(false)

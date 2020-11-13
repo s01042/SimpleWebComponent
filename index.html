@@ -58,7 +58,19 @@
         <p id="content">hier steht der Inhalt</p>
         <sl-button slot="footer" type="info">Close</sl-button>
     </sl-dialog>
-    
+
+    <!--
+        this is the delete confirmation dialog
+    -->
+    <sl-dialog label="Delete Entry?" class="dialog-overview" id="deleteConfirmation">
+        <p id="confirmationMessage">hier steht der Inhalt</p>
+        <sl-button-group slot="footer">
+            <sl-button type="secondary">No</sl-button>
+            <sl-button type="info">Yes</sl-button>
+        </sl-button-group>
+    </sl-dialog>
+
+
     <!--
         dialog for config settings
     -->
@@ -75,9 +87,11 @@
         </sl-button-group>
     </sl-dialog>
 
+    <!-- end dialog definition -->
+
     <div id='parent'>
         <div id="header">
-            <h1>GPS Data Logger V. 0.4</h1>
+            <h1>GPS Data Logger V. 0.5</h1>
         </div>
                 
         <div id='container'>

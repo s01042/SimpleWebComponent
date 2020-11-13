@@ -50,6 +50,10 @@ Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pa
 
 Make it drag and drop ready, espacially for mobile devices. Read [here](https://justinribeiro.com/chronicle/2020/07/14/handling-web-components-and-drag-and-drop-with-event.composedpath/) and [here](https://web.dev/drag-and-drop/)
 
+add a short message field (SMF) to add/edit some additional informations per entry. 
+implement to delete entries
+refactore gapi load and gapi init (load and init only when needed, eg when data should be send)
+
 # Remarks
 
 For local DEV environment i installed a CORS Proxy.

@@ -205,8 +205,22 @@ export default class ServiceComponent {
      */
     initGapi() {
         let that = this     //preserve the this context
+        /**
+         * first load the GoogleAuth class. this is a singleton class that provides
+         * methods for signIn with a google account, get the user's current sign-in status, 
+         * get specific data from the user's Google profile, request additional scopes 
+         * and sign out from the current account.
+         */
         this.gapi.load('client:auth2', function() {
-            /** Ready to make a call to gapi.auth2.init */
+            /** 
+             * Ready to make a call to gapi.client.init 
+             * for clarification: google api's are managed api's with quotas etc.
+             * any app must be authorized to use a managed google api
+             * for that you must provide an ApiKey and a ClientID
+             * later on the app will access google resources on behalf of the user who own it
+             * for that reason the app must define the permissions that the user must
+             * granted. all this happens in gapi.client.init
+             * */
             that.gapi.client.init({
                 apiKey: that.appConfig.ApiKey,
                 clientId: that.appConfig.ClientID,
@@ -219,6 +233,10 @@ export default class ServiceComponent {
                 //that.gapi.auth2.getAuthInstance().isSignedIn.listen( (singedIn) => {
                 if(! initialSignedIn ) {
                     that.gapi.auth2.getAuthInstance().signIn()
+                } else {
+                    let googleUser = that.gapi.auth2.getAuthInstance().currentUser.get()
+                    let basicProfile = googleUser.getBasicProfile()
+                    console.log (`current Google User is: ${basicProfile.getName()} (${basicProfile.getEmail()})`)
                 }
             }, (error) => {
                 console.log(JSON.stringify(error, null, 2))

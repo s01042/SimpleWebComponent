@@ -102,7 +102,9 @@ template.innerHTML = `
                 <p><slot name='city' /></p>
                 <p><slot name='temperature' /></p>
             </div>
-            <button id='toggleInfo'>hide details</button>
+            <!-- <button id='toggleInfo'>hide details</button> -->
+            <button id='deleteEntry'>delete entry</button>
+            
         </div>
     </div>
 `
@@ -176,9 +178,14 @@ export default class UserCard extends HTMLElement {
      * i switched to customEvents to inform the host about 
      * the selection of a userCard
      */
-    onSelect() {        
-        let event = new CustomEvent(this.eventName, {detail: this.id})
+    onSelect () {        
+        let event = new CustomEvent('onSelectCard', {detail: this.id})
         this.dispatchEvent(event)
+    }
+
+    onDeleteEntry() {
+        let event = new CustomEvent ('onDeleteEntry', {detail: this.id})
+        this.dispatchEvent (event)
     }
 
     /**
@@ -218,11 +225,14 @@ export default class UserCard extends HTMLElement {
      * here we simply add event listeners to the button and the h3
      */
     connectedCallback() {
-        this.shadowRoot.querySelector('#toggleInfo').addEventListener('click', (e) => {
-            this.toggleInfo()
-        })
+        // this.shadowRoot.querySelector('#toggleInfo').addEventListener('click', (e) => {
+        //     this.toggleInfo()
+        // })
         this.shadowRoot.querySelector('h2').addEventListener('click', (e) => {
-           this.onSelect()
+            this.onSelect()
+        })
+        this.shadowRoot.querySelector('#deleteEntry').addEventListener('click', (e) => {
+            this.onDeleteEntry()
         })
     }
 
@@ -232,8 +242,10 @@ export default class UserCard extends HTMLElement {
      * remove our event handlers
      */
     disconnectedCallback() {
-        this.shadowRoot.querySelector('#toggleInfo').removeEventListener('click')
-        this.shadowRoot.querySelector('h2').removeEventListener('click')
+        // this.shadowRoot.querySelector ('#toggleInfo').removeEventListener ('click')
+        this.shadowRoot.querySelector ('h2').removeEventListener('click', this.onSelect)
+
+        this.shadowRoot.querySelector ('#deleteEntry').removeEventListener ('click', this.onDeleteEntry)
     }
 
     /**
