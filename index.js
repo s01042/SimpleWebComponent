@@ -260,45 +260,56 @@ async function onNewEventHandler() {
  * @param {*} singleDayData 
  */
 function stackNewUserCard(geolocation, nearestCity, singleDayData, objectID, onTop= false) {
-    let contentDiv = document.querySelector('#container')
+    try {
 
-    let formatOptions = {
-        month: '2-digit',
-        day: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    }
+        let contentDiv = document.querySelector('#container')
 
-    let lat = geolocation.coords.latitude
-    let long = geolocation.coords.longitude
-    let googleMapHREF = `https://www.google.com/maps/place/${lat},${long}`
+        let formatOptions = {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }
 
-    let userCard = new UserCard()
-    // set an id for the userCard
-    userCard.Identifier = objectID
-    userCard.Name = new Date(geolocation.timestamp).toLocaleString('de-DE', formatOptions) + ' Uhr'
-    userCard.Image = myAppConfig.weatherIconBaseUrl + singleDayData.weather_state_abbr + '.svg'
-    // now fill the slots with data
-    let slots = userCard.shadowRoot.querySelectorAll('slot')
-    slots.forEach(slot => {
-        if (slot.name === 'position') slot.innerHTML = 
-            `<a href="${googleMapHREF}">LAT: ${lat.toFixed(4)} LONG: ${long.toFixed(4)}</a>`
-            //try href here like https://www.google.com/maps/place/52.4062,13.10386
-        if (slot.name === 'city') slot.innerText = 
-            `Nearest City: ${nearestCity.title} (${Math.round(nearestCity.distance / 1000)} km)`
-        if (slot.name === 'temperature') slot.innerText = 
-            `Temperature: ${Math.round(singleDayData.the_temp)} °C`
-    })
-    userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
-    userCard.addEventListener('onDeleteEntry', (e) => handleOnDeleteEntry(e.detail))
-    if (onTop) {
-        contentDiv.insertBefore(userCard, contentDiv.firstChild)
-        contentDiv.firstChild.scrollIntoView(false)
-        userCard.blink()
-    } else {
-        // userCard.toggleInfo()
-        contentDiv.appendChild(userCard)
+        let lat = geolocation.coords.latitude
+        let long = geolocation.coords.longitude
+        let googleMapHREF = `https://www.google.com/maps/place/${lat},${long}`
+
+        let userCard = new UserCard()
+        // set an id for the userCard
+        userCard.Identifier = objectID
+        userCard.Name = new Date(geolocation.timestamp).toLocaleString('de-DE', formatOptions) + ' Uhr'
+        if (singleDayData) {
+            userCard.Image = myAppConfig.weatherIconBaseUrl + singleDayData.weather_state_abbr + '.svg'
+        }
+        // now fill the slots with data
+        let slots = userCard.shadowRoot.querySelectorAll('slot')
+        slots.forEach(slot => {
+            if (slot.name === 'position') slot.innerHTML = 
+                `<a href="${googleMapHREF}">LAT: ${lat.toFixed(4)} LONG: ${long.toFixed(4)}</a>`
+                //try href here like https://www.google.com/maps/place/52.4062,13.10386
+            if (slot.name === 'city') slot.innerText = 
+                (nearestCity != null)?
+                    `Nearest City: ${nearestCity.title} (${Math.round(nearestCity.distance / 1000)} km)` :
+                    `Nearest City: 'n.a. (offline)'`
+            if (slot.name === 'temperature') slot.innerText = 
+                (singleDayData != null) ?
+                    `Temperature: ${Math.round(singleDayData.the_temp)} °C` :
+                    `Temperature: 'n.a. (offline)`
+        })
+        userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
+        userCard.addEventListener('onDeleteEntry', (e) => handleOnDeleteEntry(e.detail))
+        if (onTop) {
+            contentDiv.insertBefore(userCard, contentDiv.firstChild)
+            contentDiv.firstChild.scrollIntoView(false)
+            userCard.blink()
+        } else {
+            // userCard.toggleInfo()
+            contentDiv.appendChild(userCard)
+        }
+    } catch (e) {
+        console.log (`oops ... something went wrong: ${e.message}`)
     }
 
 }
