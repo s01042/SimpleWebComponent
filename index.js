@@ -282,6 +282,8 @@ function stackNewUserCard(geolocation, nearestCity, singleDayData, objectID, onT
         userCard.Name = new Date(geolocation.timestamp).toLocaleString('de-DE', formatOptions) + ' Uhr'
         if (singleDayData) {
             userCard.Image = myAppConfig.weatherIconBaseUrl + singleDayData.weather_state_abbr + '.svg'
+        } else {
+            userCard.Image = './images/hc.svg'
         }
         // now fill the slots with data
         let slots = userCard.shadowRoot.querySelectorAll('slot')
