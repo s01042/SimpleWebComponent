@@ -52,6 +52,7 @@ Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pa
 * ~~implement to delete entries~~
 * refactore gapi load and gapi init (load and init only when needed, eg when data should be send)
 * what if the cors proxy fails or is unavailable?
+* it is possible to fetch the city and weather data later, for example /api/location/(woeid)/(date)/ but i want to keep it simple
 * make it a PWA
 * add manifest
 * add service worker

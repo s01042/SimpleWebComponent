@@ -184,7 +184,7 @@ export default class UserCard extends HTMLElement {
     }
 
     onDeleteEntry() {
-        let event = new CustomEvent ('onDeleteEntry', {detail: this.id})
+        let event = new CustomEvent ('onDeleteCard', {detail: this.id})
         this.dispatchEvent (event)
     }
 

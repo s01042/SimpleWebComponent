@@ -236,7 +236,7 @@ export default class ServiceComponent {
                 } else {
                     let googleUser = that.gapi.auth2.getAuthInstance().currentUser.get()
                     let basicProfile = googleUser.getBasicProfile()
-                    console.log (`current Google User is: ${basicProfile.getName()} (${basicProfile.getEmail()})`)
+                    console.log (`current Google User is: ${basicProfile.getName()} (${basicProfile.getEmail()}), ${basicProfile.getImageUrl()}`)
                 }
             }, (error) => {
                 console.log(JSON.stringify(error, null, 2))

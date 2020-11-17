@@ -59,7 +59,7 @@ function smsEventHandler (elementKey) {
             cm = map
             selectedElement = cm.get (elementKey)
             if (selectedElement) {
-                let dialogCaption = "Short Msg for \'" + new Date (selectedElement.Location.timestamp)
+                let dialogCaption = "SMS for \'" + new Date (selectedElement.Location.timestamp)
                 .toLocaleTimeString ("de-DE",
                     {
                         month: '2-digit',
@@ -117,7 +117,7 @@ function init() {
     userCards.forEach( userCard => {
         // userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
         userCard.addEventListener('onSelectCard', (e) => smsEventHandler(e.detail))
-        userCard.addEventListener('onDeleteEntry', (e) => handleOnDeleteEntry (e.details))
+        userCard.addEventListener('onDeleteCard', (e) => handleOnDeleteCard (e.details))
     })
 }
 
@@ -133,7 +133,7 @@ function updateBadge (newValueToDisplay) {
  * persist the updated data 
  * @param {*} eventDetails 
  */
-function handleOnDeleteEntry (entryID) {
+function handleOnDeleteCard (entryID) {
     myServiceComponent.getLocallyStoredData()
         .then (map => {
             let selectedElement = map.get (entryID)
@@ -351,7 +351,7 @@ function stackNewUserCard(geolocation, nearestCity, singleDayData, objectID, onT
                     `Temperature: 'n.a. (offline)`
         })
         userCard.addEventListener('onSelectCard', (e) => smsEventHandler(e.detail))
-        userCard.addEventListener('onDeleteEntry', (e) => handleOnDeleteEntry(e.detail))
+        userCard.addEventListener('onDeleteCard', (e) => handleOnDeleteCard(e.detail))
         if (onTop) {
             contentDiv.insertBefore(userCard, contentDiv.firstChild)
             contentDiv.firstChild.scrollIntoView(false)
