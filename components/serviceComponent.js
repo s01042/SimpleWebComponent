@@ -340,6 +340,7 @@ export default class ServiceComponent {
             //or use a replacer function when stringify
             let stringToStore = JSON.stringify(theMappedData, this.replacer)
             this.myLocalStorage.setItem('s01042.GPSLogger.v1', stringToStore)
+            this.dataSet = theMappedData
             return true
         }
         catch (e) {

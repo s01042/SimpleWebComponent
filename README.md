@@ -48,9 +48,10 @@ Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pa
 
 # Todo
 
-* add a short message field (SMF) to add/edit some additional informations per entry. 
+* ~~add a short message field (SMF) to add/edit some additional informations per entry.~~ 
 * ~~implement to delete entries~~
 * refactore gapi load and gapi init (load and init only when needed, eg when data should be send)
+* what if the cors proxy fails or is unavailable?
 * make it a PWA
 * add manifest
 * add service worker

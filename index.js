@@ -51,6 +51,46 @@ function myEventHandler(elementKey) {
         })
 }
 
+function smsEventHandler (elementKey) {
+    let selectedElement = null
+    let cm = null
+    myServiceComponent.getLocallyStoredData ()
+        .then (map => {
+            cm = map
+            selectedElement = cm.get (elementKey)
+            if (selectedElement) {
+                let dialogCaption = "Short Msg for \'" + new Date (selectedElement.Location.timestamp)
+                .toLocaleTimeString ("de-DE",
+                    {
+                        month: '2-digit',
+                        day: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }
+                ) + " Uhr'"
+
+                let textToDisplay = selectedElement.SMS ? selectedElement.SMS : ""
+                const dialog = document.getElementById ("smsDialog")
+                dialog.label = dialogCaption
+                const saveButton = dialog.querySelector ('sl-button[type="info"]')
+                const cancelButton = dialog.querySelector('sl-button[type="secondary"]')
+                const textArea = document.getElementById('message-text')
+                textArea.value = textToDisplay
+                cancelButton.addEventListener ('click', (e) => {
+                    dialog.hide()
+                })
+                saveButton.addEventListener ('click', (e) => {
+                    // console.log (`sms to save: ${textArea.value}`)
+                    selectedElement.SMS = textArea.value
+                    cm.set (selectedElement.ID, selectedElement)
+                    myServiceComponent.persistDataLocally (cm)
+                    dialog.hide()
+                })
+                dialog.show ()
+            }
+        })
+}
 
 function init() {
     installMenuEventHandler()
@@ -65,6 +105,7 @@ function init() {
                 false
             )
         })
+        updateBadge (dataMap.size)
     })
 
     /**
@@ -74,9 +115,15 @@ function init() {
      */
     let userCards = document.querySelectorAll('user-card')
     userCards.forEach( userCard => {
-        userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
+        // userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
+        userCard.addEventListener('onSelectCard', (e) => smsEventHandler(e.detail))
         userCard.addEventListener('onDeleteEntry', (e) => handleOnDeleteEntry (e.details))
     })
+}
+
+function updateBadge (newValueToDisplay) {
+    const badge = document.querySelector ('sl-badge[type="info"]')
+    badge.innerText = newValueToDisplay
 }
 
 /**
@@ -114,6 +161,7 @@ function handleOnDeleteEntry (entryID) {
                         map.delete (entryID)
                         if (myServiceComponent.persistDataLocally (map)) {
                             notify (`entry with time stamp '${textToDisplay}' deleted`)
+                            updateBadge (map.size)
                         }
                         else {
                             notify (`something went wrong`, 'warning', 'exclamation-triangle', 5000)
@@ -227,7 +275,8 @@ async function onNewEventHandler() {
             Location: geolocation,
             City: (nearestCities) ? nearestCities[0] : null,
             WeatherData: singleDayWeatherData,
-            ID: myServiceComponent.generateGUID()
+            ID: myServiceComponent.generateGUID(),
+            SMS: ""
         }
         myServiceComponent.stackNewDataObject(dataObject)
             .then( result => {
@@ -235,6 +284,7 @@ async function onNewEventHandler() {
                 //about the async storage operation
                 if (myServiceComponent.persistDataLocally(result)) {
                     notify (`'${result.size}' elements in collection`, 'info', 'check2-circle', 8000)
+                    updateBadge (result.size)
                 } 
             })
         stackNewUserCard (
@@ -300,7 +350,7 @@ function stackNewUserCard(geolocation, nearestCity, singleDayData, objectID, onT
                     `Temperature: ${Math.round(singleDayData.the_temp)} °C` :
                     `Temperature: 'n.a. (offline)`
         })
-        userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
+        userCard.addEventListener('onSelectCard', (e) => smsEventHandler(e.detail))
         userCard.addEventListener('onDeleteEntry', (e) => handleOnDeleteEntry(e.detail))
         if (onTop) {
             contentDiv.insertBefore(userCard, contentDiv.firstChild)

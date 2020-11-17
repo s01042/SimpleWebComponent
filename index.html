@@ -60,6 +60,17 @@
     </sl-dialog>
 
     <!--
+        this is the sms dialog
+    -->
+    <sl-dialog label="Short Message" class="dialog-overview" id="smsDialog">
+        <sl-textarea rows="5" id="message-text" placeholder="type your sms here"></sl-textarea>
+        <sl-button-group slot="footer">
+            <sl-button type="secondary">Cancel</sl-button>
+            <sl-button type="info">Save</sl-button>
+        </sl-button-group>
+    </sl-dialog>
+
+    <!--
         this is the delete confirmation dialog
     -->
     <sl-dialog label="Delete Entry?" class="dialog-overview" id="deleteConfirmation">
@@ -91,7 +102,7 @@
 
     <div id='parent'>
         <div id="header">
-            <h1>GPS Data Logger V. 0.5</h1>
+            <h1>GPS Data Logger V. 0.6 <sl-badge type="info" pill pulse>?</sl-badge></h1>
         </div>
                 
         <div id='container'>
