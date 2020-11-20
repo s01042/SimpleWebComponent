@@ -45,8 +45,6 @@ function myEventHandler(elementKey) {
                 document.getElementById("content").innerHTML = `captured by weather station on: '${textToDisplay}'`
                 dialog.show()
                 // alert(`weather data created: '${textToDisplay.toLocaleString()}'`)
-            } else {
-                alert(`no more data available for item with id '${elementKey}'`)
             }        
         })
 }
@@ -94,6 +92,9 @@ function smsEventHandler (elementKey) {
 
 function init() {
     installMenuEventHandler()
+    myServiceComponent.addEventListener ('onSignedInStatusChanged', (e) => {
+        notify (`signed in state changed to '${e.detail}'`, 'info', 'check2-circle')
+    })
     myServiceComponent.getLocallyStoredData().then( dataMap => {
         //todo iterate over the map and build card components dynamically
         dataMap.forEach( item => {
@@ -108,17 +109,6 @@ function init() {
         updateBadge (dataMap.size)
     })
 
-    /**
-     * here we iterate over the DECLERATIVE inserted user-card components and 
-     * bind the event handler for selecting and deleting a card
-     * THIS was only for testing purposes (see index.html line 102)
-     */
-    let userCards = document.querySelectorAll('user-card')
-    userCards.forEach( userCard => {
-        // userCard.addEventListener('onSelectCard', (e) => myEventHandler(e.detail))
-        userCard.addEventListener('onSelectCard', (e) => smsEventHandler(e.detail))
-        userCard.addEventListener('onDeleteCard', (e) => handleOnDeleteCard (e.details))
-    })
 }
 
 function updateBadge (newValueToDisplay) {
@@ -184,6 +174,7 @@ function escapeHtml(html) {
 }  
 
 // Custom function to emit toast notifications (shoelace alert web component)
+// keep in mind: the toast method will completely remove (delete) the dialog from the dom tree on disposal 
 function notify(message, type = 'primary', icon = 'info-circle', duration = 3000) {
     const alert = Object.assign(document.createElement('sl-alert'), {
         type: type,
@@ -209,21 +200,44 @@ function installMenuEventHandler() {
         onNewEventHandler()
     })
     menu.addEventListener('onSend', (e) => {
-        myServiceComponent.sendData()
-            .then (file => {
-                notify (`successfully saved your data on Google Drive`, 'info', 'check2-circle', 5000)
-            }) 
-            .catch (error => {
-                notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
-            })               
+        toggleMenu ()
+        myServiceComponent.loginWithGoogle ()
+            .then (basicProfile => {
+                myServiceComponent.postDataToGoolgeDrive ()
+                    .then (file => {
+                        notify (`successfully saved data on Google Drive for user '${basicProfile.getName()}'`, 'info', 'check2-circle', 5000)
+                    })
+                    .catch (error => {
+                        notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
+                    })
+            })
     })
     menu.addEventListener('onAppConfig', editAppConfig)
+}
+
+/**
+ * toggle the floatingButton menu
+ */
+function toggleMenu () {
+    let container = document.getElementById ('floatingButton')
+    let floatingButton = Object.assign (container.firstElementChild)
+    floatingButton.toggleMenu ()
+}
+
+function storageUsage () {
+    navigator.storage.estimate().then(function(estimate) {
+  
+        console.log (`estimate usage: ${estimate.usage}`)
+        console.log (`estimate quota: ${estimate.quota / 1024 / 1024}`)
+  })
 }
 
 /**
  * edit App Config
  */
 function editAppConfig() {
+    toggleMenu ()
+    storageUsage ()
     const configDialog = document.getElementById('config')
     const saveButton = configDialog.querySelector('sl-button[type="info"]')
     const cancelButton = configDialog.querySelector('sl-button[type="secondary"]')
@@ -256,6 +270,7 @@ function editAppConfig() {
  *      the web service calls will not work, if i'm offline
  */
 async function onNewEventHandler() {
+    toggleMenu ()
     try {
         let nearestCities = null
         let weatherData = null
@@ -283,7 +298,7 @@ async function onNewEventHandler() {
                 //i can use this for displaying status infos in the gui
                 //about the async storage operation
                 if (myServiceComponent.persistDataLocally(result)) {
-                    notify (`'${result.size}' elements in collection`, 'info', 'check2-circle', 8000)
+                    notify (`'${result.size}' elements in collection`, 'info', 'check2-circle')
                     updateBadge (result.size)
                 } 
             })
@@ -294,11 +309,18 @@ async function onNewEventHandler() {
             dataObject.ID,
             true
         )
-        //todo: notify?
+    /**
+     * if the catch handler will be called something went wrong
+     */
     }
     catch( e ) {
-        // alert(`oops, something went wrong: ${e}`)        
-        notify (`oops, something went wrong: '${e.message}'`, 'warning', 'exclamation-triangle', 5000)
+        // todo: check if we could store the geolocation if (geolocation) {}
+        if (e.constructor.name === "GeolocationPositionError") {
+            notify (`GeolocationPositionError: '${e.message}'`, 'warning', 'exclamation-triangle', 50000)    
+        } else {
+            notify (`oops, something went wrong: '${e.message}'`, 'warning', 'exclamation-triangle', 50000)
+        }
+        
     }
 }
 

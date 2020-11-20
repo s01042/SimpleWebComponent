@@ -94,7 +94,7 @@ template.innerHTML = `
     </style>
     
     <div class='user-card' draggable='true'>
-        <img />
+        <img alt='weather image' />
         <div>
             <h2></h2>
             <div class='info'>
