@@ -1,9 +1,9 @@
 
 /**
  * this is a serviceComponent Class
- * it will handle all my data access functionality eg. 
+ * it will handle all the data access functionality eg. 
  * fetch data from web service, post data to web service,
- * persist data locally etc.
+ * persist data locally, init the google api, login to google etc.
  */
 export default class ServiceComponent {
 
@@ -31,7 +31,7 @@ export default class ServiceComponent {
 
     /**
      * here i handle all the stuff with gapi init and google oauth
-     * this method will return a promise with the basicUserProfile of
+     * this method will return, if successful, a promise with the basicUserProfile of
      * the logged in google user
      */
     loginWithGoogle() {
@@ -44,7 +44,7 @@ export default class ServiceComponent {
                         self.doGoogleSignIn ().then (googleUser => {
                             self.currentGoogleUser = googleUser
                             let basicProfile = self.currentGoogleUser.getBasicProfile()
-                            console.log (`current Google User is: ${basicProfile.getName()} (${basicProfile.getEmail()}), ${basicProfile.getImageUrl()}`)
+                            // console.log (`current Google User is: ${basicProfile.getName()} (${basicProfile.getEmail()}), ${basicProfile.getImageUrl()}`)
                             resolve (basicProfile)
                         })
                     }).catch (error => {
@@ -74,7 +74,7 @@ export default class ServiceComponent {
      * and will store it in local storage for later use. if a file id is present the app will use updateFile 
      * to override the file content of its "owned file" on google drive with the new data.
      */
-    postDataToGoolgeDrive() {
+    postDataToGoogleDrive() {
         let self = this     //preserve the this context
         const promise = new Promise (function (resolve, reject) {
             //if there is no googleFileID we create a new file 
@@ -265,8 +265,10 @@ export default class ServiceComponent {
      * @param {*} singedIn 
      */
     onSignedInStatusChanged (singedIn) {
-        let event = new CustomEvent ('onSignedInStatusChanged', {detail: singedIn})
-        if (this.onSignedInChanged) this.onSignedInChanged (event)
+        if (this.onSignedInChanged) {
+            let event = new CustomEvent ('onSignedInStatusChanged', {detail: singedIn})
+            this.onSignedInChanged (event)
+        }
     }
 
     /**
@@ -307,7 +309,7 @@ export default class ServiceComponent {
 
     /**
      * this is not the perfect solution!
-     * normally i would totaly wrapp the dataSet and only expose some
+     * normally i would totaly wrap the dataSet and only expose some
      * public interfaces to acceess data and to write data into the dataSet
      * 
      * the localstorage is bound to the protocol AND the domain which is
@@ -318,7 +320,7 @@ export default class ServiceComponent {
         const that = this
         let promise = new Promise(function(resolve, reject) {
             //make sure, that the deserialization takes place only once
-            //if dataSet is not null, we are here not for the first time
+            //if dataSet is not null, we are not here for the first time
             if(that.dataSet != null) resolve (that.dataSet) 
 
             that.myLocalStorage = localStorage
@@ -339,7 +341,7 @@ export default class ServiceComponent {
     }
 
     /**
-     * Immutable Objects!
+     * Immutable Objects
      * 
      * at first sight this implementation might see a little bit strange, but if 
      * you think about data binding in web components and also for example in React

@@ -32,11 +32,6 @@
  
     <title>GPS Data Logger</title>
     <!--
-        https://github.com/Bernardo-Castilho/dragdroptouch/blob/master/DragDropTouch.js
-            <script src="./polyfills/DragDropTouch.js"></script>
-
-    -->
-    <!--
         import shoelace css file
     -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.20/dist/shoelace/shoelace.css">
@@ -105,7 +100,10 @@
         <div id="header">
             <h1>GPS Data Logger V. 0.7 <sl-badge type="info" pill pulse>?</sl-badge></h1>
         </div>
-                
+        <!--
+            this is a place holder div
+            at runtime the dataEntries will be inserted here
+        -->                
         <div id='container'>
         
         </div>
@@ -121,8 +119,8 @@
         import UserCard from './components/userCard.js'
         import FloatingButton from './components/floatingButton.js'
         import {init} from './index.js'
-        
-        init()
+        init()      // call init to wire up event handlers, load the locally stored data
+                    // and update the display
     </script>
 </body>
 </html>

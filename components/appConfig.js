@@ -6,6 +6,7 @@ export default class AppConfig {
     /**
      * maybe i should switch to https://openweathermap.org/
      * i'm not really satisfied with the quality of weather data from metaweather
+     * trouble is, metaweather don't support cors header
      */
     locationServiceURL = 'https://www.metaweather.com/api/location/search/?lattlong='
     weatherServiceURL = 'https://www.metaweather.com/api/location/'
@@ -17,7 +18,7 @@ export default class AppConfig {
     /**
      * these are the relevant informations for the consumption of the
      * google drive REST API.
-     * IMPORTAND:   check https://console.developers.google.com/ for your security settings
+     * IMPORTAND:   check https://console.developers.google.com/ for your security 
      *              especially for Javascript Origin settings
      */
     // your Client ID from the Google Developer Console goes here
@@ -34,6 +35,8 @@ export default class AppConfig {
     
 
     /**
+     * default for isRunningInDevEnvironment is FALSE
+     * this param is optional
      * 
      * @param {*} isRunningInDevEnvironment 
      */

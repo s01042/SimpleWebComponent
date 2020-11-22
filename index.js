@@ -201,9 +201,13 @@ function installMenuEventHandler() {
     })
     menu.addEventListener('onSend', (e) => {
         toggleMenu ()
+        /**
+         * we only login when necessary and in response to the request of send data
+         * we want to be prepared for offline usage as long as possible
+         */
         myServiceComponent.loginWithGoogle ()
             .then (basicProfile => {
-                myServiceComponent.postDataToGoolgeDrive ()
+                myServiceComponent.postDataToGoogleDrive ()
                     .then (file => {
                         notify (`successfully saved data on Google Drive for user '${basicProfile.getName()}'`, 'info', 'check2-circle', 5000)
                     })
@@ -266,7 +270,7 @@ function editAppConfig() {
  * because of this i have to sign this function as async
  * 
  * things to keep in mind:
- *      will getGelocation works, if i'm offline? (maybe)
+ *      will getGelocation works, if i'm offline? (yes)
  *      the web service calls will not work, if i'm offline
  */
 async function onNewEventHandler() {
@@ -293,6 +297,9 @@ async function onNewEventHandler() {
             ID: myServiceComponent.generateGUID(),
             SMS: ""
         }
+        /**
+         * stack it in front of all the existing entries in local storage
+         */
         myServiceComponent.stackNewDataObject(dataObject)
             .then( result => {
                 //i can use this for displaying status infos in the gui
@@ -302,6 +309,10 @@ async function onNewEventHandler() {
                     updateBadge (result.size)
                 } 
             })
+        /**
+         * stack it in front of all the existing userCards in the GUI:
+         * the most recent first
+         */
         stackNewUserCard (
             dataObject.Location, 
             dataObject.City, 

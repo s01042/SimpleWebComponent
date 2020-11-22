@@ -1,3 +1,9 @@
+/**
+ * MS 20.11.2020
+ * this my experimental web component for a floating menu button
+ * it is designed to be used on a mobile phone
+ * see index.html for es6 module loading and index.js for wiring up
+ */
 const template = document.createElement('template')
 
 template.innerHTML = `
@@ -113,10 +119,10 @@ template.innerHTML = `
     
 `
 /**
- * this is a floating button menu for my plannend 
+ * a floating button menu for my plannend 
  * mobile phone app. it will stay always on top in 
  * the right corner of the screen so it is easy to 
- * reach with the thumb of the right hand.
+ * reach with the thumb of the right hand (i'm rigth handed 🤓).
  * the menu button is pure css. take a look at btn-line for example
  * the rotation animation is simple css translate but then
  * there is the interessting part where single lines (nth-child)
@@ -130,11 +136,11 @@ export default class FloatingButton extends HTMLElement {
 
         this.menuOpen = false
 
-        this.attachShadow( {mode: 'open'})
+        this.attachShadow ({mode: 'open'})
         this.shadowRoot.appendChild(template.content.cloneNode(true))
 
         /**
-         * here we declare custom events for this new component
+         * here we declare custom events for this component
          * we will fire this custom events from our component when the
          * corresponding buttons are pressed
          * others can bind to this events and react accordingly
@@ -154,7 +160,8 @@ export default class FloatingButton extends HTMLElement {
     }
 
     /**
-     * 
+     * will be called when the component is connected to the DOM of the hosting page
+     * we wire up the event handlers and dispatch the customEvents
      */
     connectedCallback() {
         this.shadowRoot.querySelector('#menu-btn').addEventListener('click', (e) => {
@@ -171,7 +178,10 @@ export default class FloatingButton extends HTMLElement {
         })
     }
 
-
+    /**
+     * switch menuOpen state
+     * show or hide the menu depending on the local menuOpen state
+     */
     toggleMenu() {
         this.menuOpen = !this.menuOpen
         let menuButton = this.shadowRoot.querySelector('#menu-btn')
@@ -191,4 +201,7 @@ export default class FloatingButton extends HTMLElement {
 
 }
 
+/**
+ * define the custom element
+ */
 window.customElements.define('floating-button', FloatingButton)

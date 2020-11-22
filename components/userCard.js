@@ -1,4 +1,8 @@
 /**
+ * MS 20.11.2020
+ * this is a first attempt of a reusable web component for displaying 
+ * data entries of my GPSLogger app. 
+ * 
  * I switched to ES6 modules. With modules it's easier to split 
  * source code into multiple files. Each js-file is a module. 
  * A module can export classes, a library of functions, constants,
@@ -153,6 +157,8 @@ export default class UserCard extends HTMLElement {
 
     /**
      * a simple method to toggle the display 
+     * rem: no longer used
+     * todo: clean up source code 
      */
     toggleInfo() {
         this.showInfo = !this.showInfo
@@ -225,9 +231,6 @@ export default class UserCard extends HTMLElement {
      * here we simply add event listeners to the button and the h3
      */
     connectedCallback() {
-        // this.shadowRoot.querySelector('#toggleInfo').addEventListener('click', (e) => {
-        //     this.toggleInfo()
-        // })
         this.shadowRoot.querySelector('h2').addEventListener('click', (e) => {
             this.onSelect()
         })
