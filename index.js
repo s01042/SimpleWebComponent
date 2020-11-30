@@ -265,9 +265,19 @@ function editAppConfig() {
 
 }
 
+function toggleProgressDialog () {
+    const progressDialog = Object.assign (document.getElementById ('progress'))
+    progressDialog.open ? progressDialog.hide () : progressDialog.open ()
+}
+
+function updateProgressDialog (percentage, labelText) {
+    const progressDialog = Object.assign (document.getElementById ('progress'))
+    progressDialog.percentage = percentage
+    progressDialog.textContent = labelText
+}
+
 /**
  * here i will use the syntactic sugar of await
- * because of this i have to sign this function as async
  * 
  * things to keep in mind:
  *      will getGelocation works, if i'm offline? (yes)
@@ -275,20 +285,40 @@ function editAppConfig() {
  */
 async function onNewEventHandler() {
     toggleMenu ()
+    // init objects with null
+    let nearestCities = null
+    let weatherData = null
+    let singleDayWeatherData = null
+    let geolocation = null
     try {
-        let nearestCities = null
-        let weatherData = null
-        let singleDayWeatherData = null
         /** getGeolocation should work in offline mode */
-        let geolocation = await myServiceComponent.getGeolocation()
+        geolocation = await myServiceComponent.getGeolocation()
         /**
          * web service calls are only possible if we are online
+         * but can go wrong even if online 
+         * the catch handler will be used in this cases
          */
         if (navigator.onLine) {
             nearestCities = await myServiceComponent.getNearestCities(geolocation)
             weatherData = await myServiceComponent.getWeatherFromWOEID(nearestCities[0].woeid)    
-            singleDayWeatherData = weatherData.consolidated_weather[0]
+            singleDayWeatherData = weatherData ? weatherData.consolidated_weather[0] : null
         } 
+    /**
+     * if the catch handler will be called something went wrong 
+     * we will notify the user
+     */
+    }
+    catch( e ) {
+        if (e.constructor.name === "GeolocationPositionError") {
+            notify (`GeolocationPositionError: '${e.message}'`, 'warning', 'exclamation-triangle', 50000)    
+        } else {
+            notify (`oops, something went wrong: '${e.message}'`, 'warning', 'exclamation-triangle', 50000)
+        }
+    }
+    /**
+     * if at least geolocation is not null, we will store a new entry
+     */
+    if (geolocation) {
         //bundle the collected data to a new dataObject for local storage
         let dataObject = {
             Location: geolocation,
@@ -319,19 +349,7 @@ async function onNewEventHandler() {
             dataObject.WeatherData,
             dataObject.ID,
             true
-        )
-    /**
-     * if the catch handler will be called something went wrong
-     */
-    }
-    catch( e ) {
-        // todo: check if we could store the geolocation if (geolocation) {}
-        if (e.constructor.name === "GeolocationPositionError") {
-            notify (`GeolocationPositionError: '${e.message}'`, 'warning', 'exclamation-triangle', 50000)    
-        } else {
-            notify (`oops, something went wrong: '${e.message}'`, 'warning', 'exclamation-triangle', 50000)
-        }
-        
+        )    
     }
 }
 
