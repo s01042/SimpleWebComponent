@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
+
+    <meta name="theme-color" content="#93908D">
+    
+    <link rel="apple-touch-icon" href="./images/icon128.png">
+    <!-- as hinted by lighthouse i added a canonicyl link to the HTTPS hosted page -->
+    <link rel="canonical" href="https://s01042.github.io/SimpleWebComponent/"/>
     <!--
         this is for testing only and provides a dev console on 
         mobile devices
@@ -40,6 +45,10 @@
         my own css has to loaded AFTER shoelace css 
     -->
     <link rel='stylesheet' type="text/css" href="styles.css" >
+    <!--
+        link to app manifest
+    -->
+    <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
 
@@ -99,6 +108,7 @@
     -->
     <sl-alert id="progress">
         <sl-icon slot="icon" name="info-circle"></sl-icon>
+        trying to fetch data <br>
         <sl-progress-bar percentage="0" class="progress-bar-labels">0%</sl-progress-bar>
         <br>
     </sl-alert>
@@ -108,7 +118,7 @@
 
     <div id='parent'>
         <div id="header">
-            <h1>GPS Data Logger V. 0.7 <sl-badge type="info" pill pulse>?</sl-badge></h1>
+            <h1>GPS Data Logger V. 0.8 <sl-badge type="info" pill pulse>?</sl-badge></h1>
         </div>
         <!--
             this is a place holder div

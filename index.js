@@ -17,9 +17,35 @@ import AppConfig from './components/appConfig.js'
 
 const myAppConfig = new AppConfig(false) //runs in DEV environment?
 const myServiceComponent = new ServiceComponent(myAppConfig)
+let progressDialog = null
 
 /**
- * this is a simple event handler that i bind to the 
+ * trigger to register the service worker 
+ */
+window.addEventListener ('load', () => {
+    registerServiceWorker ()
+})
+
+/**
+ * register serviceWorker
+ * the serviceWorker location is important because it defines its scope
+ * another important point: a ServiceWorker location has to be https hosted
+ * localhost of course will also work
+ */
+async function registerServiceWorker () {
+    if ('serviceWorker' in navigator) {
+        try {
+            await navigator.serviceWorker.register ('./service-worker.js')
+        } catch (exception) {
+            notify (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 50000)
+        }
+    } else {
+        notify (`your browser does not support ServiceWorker.`)
+    }
+}
+
+/**
+ * this is a simple event handler binded to the 
  * custom event of the userCard component
  * @param {*} data 
  */
@@ -49,6 +75,10 @@ function myEventHandler(elementKey) {
         })
 }
 
+/**
+ * event handler for small messages
+ * @param {*} elementKey 
+ */
 function smsEventHandler (elementKey) {
     let selectedElement = null
     let cm = null
@@ -90,6 +120,9 @@ function smsEventHandler (elementKey) {
         })
 }
 
+/**
+ * the init routine to wire up event handlers and to load and display locally stored data 
+ */
 function init() {
     installMenuEventHandler()
     myServiceComponent.addEventListener ('onSignedInStatusChanged', (e) => {
@@ -111,6 +144,10 @@ function init() {
 
 }
 
+/**
+ * update the badge on top of the screen with the actual number of data entries
+ * @param {*} newValueToDisplay 
+ */
 function updateBadge (newValueToDisplay) {
     const badge = document.querySelector ('sl-badge[type="info"]')
     badge.innerText = newValueToDisplay
@@ -266,14 +303,14 @@ function editAppConfig() {
 }
 
 function toggleProgressDialog () {
-    const progressDialog = Object.assign (document.getElementById ('progress'))
-    progressDialog.open ? progressDialog.hide () : progressDialog.open ()
+    progressDialog = Object.assign (document.getElementById ('progress'))
+    progressDialog.open ? progressDialog.hide () : progressDialog.show ()
 }
 
 function updateProgressDialog (percentage, labelText) {
-    const progressDialog = Object.assign (document.getElementById ('progress'))
-    progressDialog.percentage = percentage
-    progressDialog.textContent = labelText
+    const progressBar = document.querySelector ('.progress-bar-labels')
+    progressBar.percentage = percentage
+    progressBar.textContent = labelText
 }
 
 /**
@@ -290,8 +327,10 @@ async function onNewEventHandler() {
     let weatherData = null
     let singleDayWeatherData = null
     let geolocation = null
+    toggleProgressDialog ()
     try {
         /** getGeolocation should work in offline mode */
+        updateProgressDialog ("30", "fetching geolocation")
         geolocation = await myServiceComponent.getGeolocation()
         /**
          * web service calls are only possible if we are online
@@ -299,7 +338,9 @@ async function onNewEventHandler() {
          * the catch handler will be used in this cases
          */
         if (navigator.onLine) {
+            updateProgressDialog ("60", "fetching City")
             nearestCities = await myServiceComponent.getNearestCities(geolocation)
+            updateProgressDialog ("90", "fetching weather data")
             weatherData = await myServiceComponent.getWeatherFromWOEID(nearestCities[0].woeid)    
             singleDayWeatherData = weatherData ? weatherData.consolidated_weather[0] : null
         } 
@@ -319,6 +360,7 @@ async function onNewEventHandler() {
      * if at least geolocation is not null, we will store a new entry
      */
     if (geolocation) {
+        updateProgressDialog ("100", "save data locally")
         //bundle the collected data to a new dataObject for local storage
         let dataObject = {
             Location: geolocation,
@@ -351,6 +393,9 @@ async function onNewEventHandler() {
             true
         )    
     }
+    // reset progress dialog
+    updateProgressDialog ("0", "")
+    toggleProgressDialog ()
 }
 
 /**
