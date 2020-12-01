@@ -1,0 +1,37 @@
+{
+    "name": "GPSLogger app",
+    "short_name": "GPSLogger",
+    "start_url": "/index.html", 
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#93908D",
+    "theme_color": "#93908D",
+    "description": "a GPSLogger app to capture geolocation data",
+    "scope": "/",
+    "icons": [
+        {
+            "src": "./images/icon512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "./images/icon64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "./images/icon256.png",
+            "sizes": "256x256",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "developer": {
+        "name": "s01042",
+        "url": "https://github.com/s01042"
+    },
+    "permissions": [
+        "geolocation"
+    ]
+        
+}
