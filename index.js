@@ -35,7 +35,7 @@ window.addEventListener ('load', () => {
 async function registerServiceWorker () {
     if ('serviceWorker' in navigator) {
         try {
-            await navigator.serviceWorker.register ('./service-worker.js')
+            await navigator.serviceWorker.register ('./SimpleWebComponent/service-worker.js')
         } catch (exception) {
             notify (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 50000)
         }
