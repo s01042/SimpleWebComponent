@@ -114,21 +114,44 @@ For a better understanding it is worthy to play through the different scenarios 
 
 # Progressive Web Apps
 
-Building an application that can run on multiple platforms (Windows, Mac, Linux, Android, iOS) can be a challenge. You just don't have to deal with platform-specific features but you also have to build platform specific packages and deploy them accordingly. On the other hand there are all this web experiences that are so familiar to many users nowaday. The greatest burden, to build a native GUI for a specific platform, becomes more and more irrelevant. The regular use of browser apps and websites has trained most users in some way in using irregular, non platform specific GUI elements and designs. And browsers becomes better and better. I would say, a browser with its Document Object Model is the best platform indepentend GUI library these days. It seams naturally to me to combine app technologies with web technologies and this is what Progressive Web App will allow me to do. 
+Building an application that runs on multiple platforms (Windows, Mac, Linux, Android, iOS) can be challenging. You just don't have to deal with platform-specific features but you also have to build platform specific packages and deploy them accordingly. On the other hand there are all this web experiences that are so familiar to many users nowaday. The greatest burden, to build a native GUI for a specific platform, becomes more and more irrelevant. The regular use of browser apps and websites has trained most users in some way in using irregular, non platform specific GUI elements and designs. And browsers becomes better and better. I would say, a browser with its Document Object Model is the best platform indepentend GUI library these days. It seams naturally to me to combine app technologies with web technologies and this is what Progressive Web App will allow me to do. 
 
-Regarding to my use case my first priority is to be able to use the app totally offline. This i can achieve by aggressively caching all the static content of my app locally. For that the overall design of the app as an app shell comes in handy. Most parts of the app will not change over a long time. The complete GUI is static in some way. The moving parts of the app are my collected data, that i cache locally anyway.
+Regarding to my use case my first priority is to be able to use the app totally offline. This i can achieve by aggressively caching all the static content of my app locally. For that the overall design of the app as an app shell comes in handy. Most parts of the app will not change over a long time. The complete GUI is static in some way. The "moving parts" of the app are my collected data, that i cache locally anyway.
 
 There are a lot of different caching strategies. [The Offline Cookbook](https://web.dev/offline-cookbook/) is a very good source for informations on this topic. 
 
-I'm wavering between the alternative strategies of [cache only](https://web.dev/offline-cookbook/#cache-only) and [stale-while-revalidate](https://web.dev/offline-cookbook/#stale-while-revalidate). With cache-only i would have to update my service worker to get a "new version" of my app to the device. 
+~~I'm wavering between the alternative strategies of [cache only](https://web.dev/offline-cookbook/#cache-only) and [stale-while-revalidate](https://web.dev/offline-cookbook/#stale-while-revalidate).~~ With cache-only i would have to update my service worker to get a "new version" of my app to the device.
 
-Todo: 
+After the first few tries and some debugging, I decided to use a mixed caching strategy. I apply [stale-while-revalidate](https://web.dev/offline-cookbook/#stale-while-revalidate) for all the static elements of my app. And i use [network only](https://web.dev/offline-cookbook/#network-only) when making RESTful webservice calls beacuse i want live data or no data. In my serviceWorker I use pattern matching on the request url to decide which way to go:
 
-* Identify my statice resources
+```javascript
+if (/\/www.my-service-endpoint.com\/api/.test (requestUrl)) {
+	event.respondWith (networkOnly (event.request))
+} else {
+  event.respondWith (staleWhileRevalidate (event.request))
+}
+```
+
+
+
+Things done: 
+
+* identify my statice resources
 * write a manifest
-* prepare an app icon
+* prepare app icons
 * implement a service worker
 * implement the caching strategy in service worker
+* check implementation with chrome dev tool **lighthouse**
+
+## Some remarks to serviceWorker and the webmanifest
+
+* the serviceWorker location is important because it defines its scope
+* the **max scope** of a serviceWorker is the location of the worker
+* personal github pages are all hosted under one root domain (`https://[username].github.io/`)
+* use relative paths when defining the scope in manifest and serviceWorker (eg. ```'./'``` )
+* What's listed in **start_url** of the manifest must always be servable by the service worker, even when offline
+* a serviceWorker location has to be HTTPS hosted (or localhost)
+* the serviceWorker scope must match with the scope in the manifest
 
 # Whats next?
 
@@ -136,8 +159,8 @@ In this example I only scratched on the surface of web components. There is a lo
 
 There is a growing number of ready to use web components and there are frameworks that eases to build web components. [This](https://www.polymer-project.org/) is a good starting point to learn more. Alongside my own web components i reused some [shoelace](https://shoelace.style/) web components
 
-# Try out the example web component
-Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pages, where a little demo is hosted.
+# Try out the example app
+Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pages, where a demo is hosted. Keep in mind, that i didn't make this app responsive. My available test equipment is a Macbook Pro (my dev machine), a Huawei P20 pro (the target device for mobile use) and an iPad Air 2. On my dev machine and the target device P20 pro I tested intensive and things are working online and offline as expected.
 
 # Todo
 
@@ -145,11 +168,11 @@ Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pa
 * ~~implement to delete entries~~
 * ~~refactore gapi load and gapi init (load and init only when needed, eg when data should be send)~~
 * ~~what if the cors proxy fails or is unavailable?~~ (handle errors and fall back to an entry without these data)
-* it is possible to fetch the city and weather data later, for example /api/location/(woeid)/(date)/ but i want to keep it simple
-* make it a PWA
-* add manifest
-* add service worker
-* add local caching 
+* ~~it is possible to fetch the city and weather data later, for example /api/location/(woeid)/(date)/ but i want to keep it simple~~
+* ~~make it a PWA~~
+* ~~add manifest~~
+* ~~add service worker~~
+* ~~add local caching~~
 
 
 
