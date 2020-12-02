@@ -110,24 +110,32 @@ async function networkOnly (request) {
 async function staleWhileRevalidate (request) {
     // open the cache
     const cache = await caches.open (cacheName)
-    // try to fetch from cache
+    /**
+     * try to fetch from cache
+     * this should work for all the static content of the app shell
+     * */ 
     const cachedVersion = await cache.match (request)
-    // fetch an update if possible and cache the new version
-    try {
-        const freshVersion = await fetch (request)
-        /**
-         * the response of fetch is a stream and because we want the 
-         * browser to consume the response as well as the cache 
-         * consuming the response, we need to clone it so we have two
-         * streams
-         */
-        await cache.put (request, freshVersion.clone())         
-        if (cachedVersion) {
+
+    // if online fetch an update if possible and cache the new version
+    if (navigator.onLine) {
+        try {
+            const freshVersion = await fetch (request)
+            /**
+             * the response of fetch is a stream and because we want the 
+             * browser to consume the response as well as the cache 
+             * consuming the response, we need to clone it so we have two
+             * streams
+             */
+            await cache.put (request, freshVersion.clone())         
+            if (cachedVersion) {
+                return cachedVersion
+            } else {
+                return freshVersion
+            } 
+        } catch (e) {
             return cachedVersion
-        } else {
-            return freshVersion
-        } 
-    } catch (e) {
+        }    
+    } else {
         return cachedVersion
     }
 }
