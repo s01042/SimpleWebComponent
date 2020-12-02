@@ -35,8 +35,11 @@ window.addEventListener ('load', () => {
 async function registerServiceWorker () {
     if ('serviceWorker' in navigator) {
         try {
+            /**
+             * the max scope of a serviceWorker is the the location of the worker!
+             */
             let reg = await navigator.serviceWorker.register ('./service-worker.js')
-            notify (`ServiceWorker registered with scope '${reg.scope}'`, 'info')
+            notify (`ServiceWorker registered with scope '${reg.scope}'!`, 'info')
         } catch (exception) {
             notify (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 50000)
         }
