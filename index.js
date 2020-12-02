@@ -37,14 +37,13 @@ async function registerServiceWorker () {
     if ('serviceWorker' in navigator) {
         try {
             /**
-             * the max scope of a serviceWorker is the the location of the worker!
+             * the max scope of a serviceWorker is the location of the worker!
              * personal github pages are all hosted under one root domain (`https://[username].github.io/`).  
-             * this caused some stumbling when registering serviceWorkers
+             * this may cause some stumbling when registering serviceWorkers
+             * IMPORTANT: check that serviceWorker scope is matching with the scope in the manifest
              */
-            //let reg = await navigator.serviceWorker.register ('https://s01042.github.io/SimpleWebComponent/service-worker.js', {scope: 'https://s01042.github.io/SimpleWebComponent/'})
             let reg = await navigator.serviceWorker.register ('./service-worker.js', {scope: './'})
-            notify (`scope is '${reg.scope}'!`, 'info', 'info-circle', 10000)
-            console.log (`ServiceWorker registered with './service-worker.js'. scope is "${reg.scope}" !!!`)
+            notify (`ServiceWorker registered. Scope is '${reg.scope}'!`, 'info', 'info-circle', 5000)
         } catch (exception) {
             notify (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 50000)
         }
@@ -287,7 +286,6 @@ function storageUsage () {
  */
 function editAppConfig() {
     toggleMenu ()
-    storageUsage ()
     const configDialog = document.getElementById('config')
     const saveButton = configDialog.querySelector('sl-button[type="info"]')
     const cancelButton = configDialog.querySelector('sl-button[type="secondary"]')

@@ -83,6 +83,8 @@ self.addEventListener('fetch', (event) =>{
     const requestUrl = new URL (event.request.url)
     /**
      * this pattern will even match calls via the proxy server
+     * maybe this is even better? 
+     * if (event.request.url.startsWith(self.location.origin))
      */
     if (/\/www.metaweather.com\/api/.test (requestUrl)) {
         event.respondWith (networkOnly (event.request))
