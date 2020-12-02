@@ -38,6 +38,7 @@ async function registerServiceWorker () {
             /**
              * the max scope of a serviceWorker is the the location of the worker!
              */
+            //let reg = await navigator.serviceWorker.register ('./service-worker.js', {scope: './'})
             let reg = await navigator.serviceWorker.register ('./service-worker.js')
             notify (`ServiceWorker scope is '${reg.scope}'!`, 'info', 'info-circle', 10000)
         } catch (exception) {
