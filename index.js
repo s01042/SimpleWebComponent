@@ -260,6 +260,9 @@ function installMenuEventHandler() {
                         notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
                     })
             })
+            .catch (error) {
+                notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
+            }
     })
     menu.addEventListener('onAppConfig', editAppConfig)
 }
