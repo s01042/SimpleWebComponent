@@ -43,7 +43,7 @@ async function registerServiceWorker () {
              * IMPORTANT: check that serviceWorker scope is matching with the scope in the manifest
              */
             let reg = await navigator.serviceWorker.register ('./service-worker.js', {scope: './'})
-            notify (`ServiceWorker registered. Scope is '${reg.scope}'!`, 'info', 'info-circle', 5000)
+            //notify (`ServiceWorker registered. Scope is '${reg.scope}'!`, 'info', 'info-circle', 5000)
         } catch (exception) {
             notify (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 50000)
         }
