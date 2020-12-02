@@ -37,6 +37,8 @@ async function registerServiceWorker () {
         try {
             /**
              * the max scope of a serviceWorker is the the location of the worker!
+             * personal github pages are all hosted under one root domain (`https://[username].github.io/`).  
+             * this caused some stumbling when registering serviceWorkers
              */
             let reg = await navigator.serviceWorker.register ('https://s01042.github.io/SimpleWebComponent/service-worker.js', {scope: 'https://s01042.github.io/SimpleWebComponent/'})
             //let reg = await navigator.serviceWorker.register ('./service-worker.js')
