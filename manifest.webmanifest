@@ -7,7 +7,7 @@
     "background_color": "#93908D",
     "theme_color": "#93908D",
     "description": "a GPSLogger app to capture geolocation data",
-    "scope": "/",
+    "scope": "./",
     "icons": [
         {
             "src": "./images/icon512.png",

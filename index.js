@@ -29,8 +29,9 @@ window.addEventListener ('load', () => {
 /**
  * register serviceWorker
  * the serviceWorker location is important because it defines its scope
+ * Whats listed in start_url of the manifest must always be servable by the service worker, even when offline.
  * another important point: a ServiceWorker location has to be https hosted
- * localhost of course will also work
+ * location 'localhost' will work as well
  */
 async function registerServiceWorker () {
     if ('serviceWorker' in navigator) {
@@ -40,10 +41,10 @@ async function registerServiceWorker () {
              * personal github pages are all hosted under one root domain (`https://[username].github.io/`).  
              * this caused some stumbling when registering serviceWorkers
              */
-            let reg = await navigator.serviceWorker.register ('https://s01042.github.io/SimpleWebComponent/service-worker.js', {scope: 'https://s01042.github.io/SimpleWebComponent/'})
-            //let reg = await navigator.serviceWorker.register ('./service-worker.js')
+            //let reg = await navigator.serviceWorker.register ('https://s01042.github.io/SimpleWebComponent/service-worker.js', {scope: 'https://s01042.github.io/SimpleWebComponent/'})
+            let reg = await navigator.serviceWorker.register ('./service-worker.js', {scope: './'})
             notify (`scope is '${reg.scope}'!`, 'info', 'info-circle', 10000)
-            console.log (`ServiceWorker scope is "${reg.scope}" !!!`)
+            console.log (`ServiceWorker registered with './service-worker.js'. scope is "${reg.scope}" !!!`)
         } catch (exception) {
             notify (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 50000)
         }
