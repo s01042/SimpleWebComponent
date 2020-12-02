@@ -11,7 +11,7 @@
     <!--
         this is for testing only and provides a dev console on 
         mobile devices
-    -->
+
     <script src="https://code.hnldesign.nl/hnl.mobileConsole.1.3.js?daae8c34"></script>
     <script>
         if (!mobileConsole.status.initialized) {
@@ -31,7 +31,7 @@
         var testObject = { 'test' : 'one', 'func' : function() {return 'Hello world'; },'array' : [1,2,3,4,5, [1,2,3]], 'emptyArray' : [], 'object' : {'anotherObject' : 'Why not', 'emptyObject' : {}}, 'finalkey' : 'finalvalue'}
     </script>
 
-
+    -->
     <!-- end mobile console stuff       -->
  
  
@@ -111,7 +111,7 @@
     <!--
         dialog to show progress while calling RESTful api's
     -->
-    <sl-alert id="progress">
+    <sl-alert id="progress" type="info">
         <sl-icon slot="icon" name="info-circle"></sl-icon>
         trying to fetch data <br>
         <sl-progress-bar percentage="0" class="progress-bar-labels">0%</sl-progress-bar>

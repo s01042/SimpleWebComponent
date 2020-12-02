@@ -220,7 +220,7 @@ function escapeHtml(html) {
 
 // Custom function to emit toast notifications (shoelace alert web component)
 // keep in mind: the toast method will completely remove (delete) the dialog from the dom tree on disposal 
-function notify(message, type = 'primary', icon = 'info-circle', duration = 3000) {
+function notify(message, type = 'info', icon = 'info-circle', duration = 3000) {
     const alert = Object.assign(document.createElement('sl-alert'), {
         type: type,
         closable: true,
@@ -260,9 +260,9 @@ function installMenuEventHandler() {
                         notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
                     })
             })
-            .catch (error) {
+            .catch (error => {
                 notify (`${error.message}`, 'warning', 'exclamation-triangle', 5000)
-            }
+            })
     })
     menu.addEventListener('onAppConfig', editAppConfig)
 }
