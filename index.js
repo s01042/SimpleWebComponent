@@ -41,7 +41,7 @@ async function registerServiceWorker () {
             //let reg = await navigator.serviceWorker.register ('./service-worker.js', {scope: './'})
             let reg = await navigator.serviceWorker.register ('./service-worker.js')
             notify (`ServiceWorker scope is '${reg.scope}'!`, 'info', 'info-circle', 10000)
-            console.log (`ServiceWorker scope is "{reg.scope}" !!!`)
+            console.log (`ServiceWorker scope is "${reg.scope}" !!!`)
         } catch (exception) {
             notify (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 50000)
         }
