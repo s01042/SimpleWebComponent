@@ -1,7 +1,7 @@
 {
     "name": "GPSLogger app",
     "short_name": "GPSLogger",
-    "start_url": "./SimpleWebComponent/", 
+    "start_url": "./", 
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#93908D",
