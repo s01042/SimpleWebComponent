@@ -3,7 +3,7 @@ I'm a little bit tired of all the JavaScript frameworks. There are a bunch of th
 
 And then these frameworks comes and goes on a regular basis. So it is very easy for investments to be lost.
 
-But for me something changed with the rising of web components.
+But for me something changed when i became aware of web components.
 
 Web components **do not require any special 3rd party libraries or frameworks** but can certainly be used with them (eg. with Angular, Vue and React). 
 
@@ -11,7 +11,7 @@ Web components are **based on web standards and will never become obsolete**. We
 
 Web components will help me to structure my source code. I can split functionality in meaningful and separated parts (encapsulation), for example service components, business objects and view components. I can assemble my GUI from view components and wire them up via events and event handlers. I can use data binding to connect gui components with business objects.
 
-Sounds promising. Let's make an investment. I will challenge myself again to see what i can put together. 
+Sounds promising. Let's make an investment. I will challenge myself again to see what i can put together. 🤓
 
 
 # What are Web Components?
@@ -41,11 +41,11 @@ The target device of this PWA is my mobile phone, a Huawei P20 Pro. So I did not
 
 When on travel, i want to collect geolocation data, enrich them with weather data of my actual location and some short message. For weather data i will consume a webservice. I then want to backup this collected data locally on the device. The app should be robust enough to be usable even in remote areas with no internet connection. The failing of a web service call should not break the entire app. So some error handling and fallback is required. The most valuable informations are my geolocation and the short message which i want to record and collect under all circumstances. If a network connection is available i want to be able to post the locally collected data to my Google Drive. Let's call this app **GPSLogger**. 
 
-There will be a corresponding Website to this GPSLogger. This site will simply fetch the serialized data from my Google Drive and visualize the stages of my travel on a simple map. So friends and family can be informed about my location and wellbeing.
+There will be a corresponding Website to this GPSLogger. It will call it **anyplace**. This site will simply fetch the serialized data from my Google Drive and visualize the stages of my travel on a simple map. So friends and family can be informed about my location and wellbeing.
 
 ## My web components
 
-I built my first simple web components with plain vanilla Javascript. It is really nothing special but it shows the basic structure of a web component.
+I built my first simple web components with plain vanilla Javascript. I like to get my feet wet and learn some basic stuff about a technology before i use a framework, that hides some of the complexity from me. I believe that i can then better understand what such a framework is aiming for and how it eases my work. My components are really nothing special but they show me the basic structure of a web component.
 
 I used html attributes to 'transfer' (or bind) data to the component. I used 'encapsulated' css to style the component. I used eventhandlers to establish interaction with the component. 
 
@@ -61,7 +61,7 @@ There is even a CORS preflight request (a HTTP Option method call). With it a co
 
 But i was trapped by the CORS problem. I'm hosting my PWA on GitHub pages where you can only deploy static web sites. There are no server side technologies available on GitHub pages on which I could have build my own CORS Proxy or some kind of web service proxy. 
 
-So GitHub pages is the origin of my app. The JavaScript code of my app is running locally on the client device and in the clients browser. That leads to the fact, that fetching the weather data from metaweahter.com is a cross origin call always controlled by CORS.
+So GitHub pages is the origin of my app. The JavaScript code of my app is running locally on the client device and in the client browser. That leads to the fact, that fetching the weather data from metaweahter.com is a cross origin call always controlled by CORS.
 Now the problem is, that metaweather.com currently don't support CORS headers (check it with the API builder tool of your choice). Thats why the browser will rise a CORS error.
 
 There are some solutions for this kind of problems for example **jsonp** but nowadays there are even more restrictions to further secure web browsers e.g. **C**ross **O**rigin **R**esource **B**locking (CORB). 
@@ -77,7 +77,7 @@ In production environment i use the CORS proxy from https://cors-anywhere.heroku
 
 # How i use the Google API
 
-Google APIs are managed APIs. Some are of cost others are completly free. All APIs have quotas. Before using a managed Google API you have to request it in the Google developer console. This request takes place **on your own behalf**, so you will be charged for and your quotas will be affected by consuming the API. In response to this request you get an API-Key and a ClientID. These two values are essential for the further usage of the API. Everybody who knows about this two data can now consume the API. So it is very important to keep this data safe and private. That's why it is no good idea to to write down this data in your source code and then host this code in a public source code repository like GitHub. 
+Google APIs are managed APIs. Some are of cost others are completly free. All APIs have quotas. Before using a managed Google API you have to request it in the Google developer console. This request takes place **on your own behalf**, so **you** will be charged for and **your** quotas will be affected by consuming the API. In response to this request you get **your** API-Key and **your** ClientID. These two values are essential for the further usage of the API. Everybody who knows about this two data can now consume the API. So it is very important to keep this data safe and private. That's why it is no good idea to to write down this data in your source code and then host this code in a public source code repository like GitHub. 
 
 On the other hand my app will need this information at runtime to authorize the API usage. In a managed environment i could have  deployed this information safely for example via environment variables which are not public accessible. On GitHub pages there is no way to do it like this. That's why i use a config dialog in my app. On initial use of the app i can deploy the necessary API-Key and ClientID locally and store them on the device itself. This i need to do only once. Because the GPSLogger app is not intended for public but private use, this is one way to keep my secrets secret and still host the app for personal use on GitHub pages free of cost. 
 
@@ -89,7 +89,7 @@ There is an additional layer of protection for the API. In the Google Developer 
 
 The process of enabling the Google API as described above has nothing to do with my personal google drive account. It only allows me to use  the API in general. By using this API every user of my app could store his own set of collected data on his own google drive (**if i would deploy the API Key on the hosting server**). 
 
-But for this to do my app must be able to login to the google drive of the current user. This of course is another question of trust. Who would provide his own Google cedentials to an untrusty app from an untrusty source without concerns? 
+But for this to do my app must be able to login to the google drive of the current user. This of course is another matter of trust. Who would provide his own Google cedentials to an untrusty app from an untrusty source without concerns? 
 
 This is where the 3-legged Oauth authorization comes in place.   
 
@@ -114,15 +114,15 @@ For a better understanding it is worthy to play through the different scenarios 
 
 # Progressive Web Apps
 
-Building an application that runs on multiple platforms (Windows, Mac, Linux, Android, iOS) can be challenging. You just don't have to deal with platform-specific features but you also have to build platform specific packages and deploy them accordingly. On the other hand there are all this web experiences that are so familiar to many users nowaday. The greatest burden, to build a native GUI for a specific platform, becomes more and more irrelevant. The regular use of browser apps and websites has trained most users in some way in using irregular, non platform specific GUI elements and designs. And browsers becomes better and better. I would say, a browser with its Document Object Model is the best platform indepentend GUI library these days. It seams naturally to me to combine app technologies with web technologies and this is what Progressive Web App will allow me to do. 
+Building an application that runs on multiple platforms (Windows, Mac, Linux, Android, iOS) can be challenging. You just don't have to deal with platform-specific features but you also have to build platform specific packages and deploy them accordingly. On the other hand there are all this web experiences that are so familiar to many users nowaday. The greatest burden, to build a native GUI for a specific platform, becomes more and more irrelevant. The regular use of browser apps and websites has "trained" most users in some way in using irregular, non platform specific GUI elements and designs. And browsers becomes better and better. I would say, a browser with its Document Object Model is the best platform indepentend GUI library these days. It seams naturally to me to combine app technologies with web technologies and this is what Progressive Web App will allow me to do. 
 
 Regarding to my use case my first priority is to be able to use the app totally offline. This i can achieve by aggressively caching all the static content of my app locally. For that the overall design of the app as an app shell comes in handy. Most parts of the app will not change over a long time. The complete GUI is static in some way. The "moving parts" of the app are my collected data, that i cache locally anyway.
 
-There are a lot of different caching strategies. [The Offline Cookbook](https://web.dev/offline-cookbook/) is a very good source for informations on this topic. 
+There are a lot of different caching strategies. [The Offline Cookbook](https://web.dev/offline-cookbook/) is a very good resource for informations on this topic. 
 
 ~~I'm wavering between the alternative strategies of [cache only](https://web.dev/offline-cookbook/#cache-only) and [stale-while-revalidate](https://web.dev/offline-cookbook/#stale-while-revalidate).~~ With cache-only i would have to update my service worker to get a "new version" of my app to the device.
 
-After the first few tries and some debugging, I decided to use a mixed caching strategy. I apply [stale-while-revalidate](https://web.dev/offline-cookbook/#stale-while-revalidate) for all the static elements of my app. And i use [network only](https://web.dev/offline-cookbook/#network-only) when making RESTful webservice calls beacuse i want live data or no data. In my serviceWorker I use pattern matching on the request url to decide which way to go:
+After the first few tries and some debugging, I decided to use a mixed caching strategy. I apply [stale-while-revalidate](https://web.dev/offline-cookbook/#stale-while-revalidate) for all the static elements of my app. And i use [network only](https://web.dev/offline-cookbook/#network-only) when making RESTful webservice calls because i want live data or no data. In my serviceWorker I use pattern matching on the request url to decide which way to go:
 
 ```javascript
 if (/\/www.my-service-endpoint.com\/api/.test (requestUrl)) {
@@ -148,19 +148,21 @@ Things done:
 * the serviceWorker location is important because it defines its scope
 * the **max scope** of a serviceWorker is the location of the worker
 * personal github pages are all hosted under one root domain (`https://[username].github.io/`)
-* use relative paths when defining the scope in manifest and serviceWorker (eg. ```'./'``` )
+* so use relative paths when defining the scope in manifest and serviceWorker (eg. ```'./'``` )
 * What's listed in **start_url** of the manifest must always be servable by the service worker, even when offline
 * a serviceWorker location has to be HTTPS hosted (or localhost)
 * the serviceWorker scope must match with the scope in the manifest
 
 # Whats next?
 
-In this example I only scratched on the surface of web components. There is a lot more to be discovered, for example event bubbling, nesting web components and wire them up with events and event handlers. 
+In this example I only scratched on the surface of web components and then only with the talent of a beginner. There is a lot more to be discovered, for example event bubbling, nesting web components and wire them up with events and event handlers. 
+
+By reviewing my source code i became aware, that i can easily encapsulate all of the index.js code in an **app web component**. Then the only import statement in index.html would be this app component. Learning never ends. Maybe later ... 
 
 There is a growing number of ready to use web components and there are frameworks that eases to build web components. [This](https://www.polymer-project.org/) is a good starting point to learn more. Alongside my own web components i reused some [shoelace](https://shoelace.style/) web components
 
 # Try out the example app
-Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pages, where a demo is hosted. Keep in mind, that i didn't make this app responsive. My available test equipment is a Macbook Pro (my dev machine), a Huawei P20 pro (the target device for mobile use) and an iPad Air 2. On my dev machine and the target device P20 pro I tested intensive and things are working online and offline as expected.
+Use this [link](https://s01042.github.io/SimpleWebComponent/) to go to github pages, where a demo is hosted. Keep in mind, that i didn't make this app responsive. My available test equipment is limited, a Macbook Pro (my dev machine), a Huawei P20 pro (the target device for mobile use) and an iPad Air 2. On my dev machine and my preferred target device P20 pro I tested intensive and things are working online and offline as expected.
 
 # Todo
 
