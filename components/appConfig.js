@@ -10,7 +10,8 @@ export default class AppConfig {
      */
     locationServiceURL = 'https://www.metaweather.com/api/location/search/?lattlong='
     weatherServiceURL = 'https://www.metaweather.com/api/location/'
-    CORSProxyURL_PROD = 'https://cors-anywhere.herokuapp.com/'
+    CORSProxyURL_PROD = 'https://cors-anywhere.herokuapp.com/'    
+    /*  CORSProxyURL_PROD = 'https://thingproxy.freeboard.io/fetch/'    */
     CORSProxyURL_DEV = 'http://localhost:8080/'
     weatherIconBaseUrl = 'https://www.metaweather.com/static/img/weather/'
     isRunningInDevEnvironment
