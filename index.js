@@ -53,37 +53,6 @@ async function registerServiceWorker () {
 }
 
 /**
- * this is a simple event handler binded to the 
- * custom event of the userCard component
- * @param {*} data 
- */
-function myEventHandler(elementKey) {
-    myServiceComponent.getLocallyStoredData()
-        .then( map => {
-            let selectedElement = map.get(elementKey)
-            if (selectedElement) {
-                let textToDisplay = new Date(selectedElement.WeatherData.created).
-                    toLocaleTimeString("de-DE",  
-                        {
-                            month: '2-digit',
-                            day: '2-digit',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }
-                    ) + " Uhr"
-                const dialog = document.getElementById("dialog")
-                const closeButton = dialog.querySelector('sl-button[slot="footer"]')
-                closeButton.addEventListener ('click', () => {dialog.hide()})
-                dialog.label = 'Timestamp of weather data'
-                document.getElementById("content").innerHTML = `captured by weather station on: '${textToDisplay}'`
-                dialog.show()
-                // alert(`weather data created: '${textToDisplay.toLocaleString()}'`)
-            }        
-        })
-}
-
-/**
  * event handler for small messages
  * @param {*} elementKey 
  */
@@ -111,15 +80,17 @@ function smsEventHandler (elementKey) {
                 dialog.label = dialogCaption
                 const saveButton = dialog.querySelector ('sl-button[type="info"]')
                 const cancelButton = dialog.querySelector('sl-button[type="secondary"]')
-                const textArea = document.getElementById('message-text')
+                let textArea = document.getElementById('message-text')
                 textArea.value = textToDisplay
                 cancelButton.addEventListener ('click', (e) => {
+                    textArea = ""
                     dialog.hide()
                 })
                 saveButton.addEventListener ('click', (e) => {
-                    // console.log (`sms to save: ${textArea.value}`)
                     selectedElement.SMS = textArea.value
-                    cm.set (selectedElement.ID, selectedElement)
+                    textArea = ""
+                    // the following statement is useless because we have a ref object in hands
+                    // cm.set (selectedElement.ID, selectedElement)
                     myServiceComponent.persistDataLocally (cm)
                     dialog.hide()
                 })

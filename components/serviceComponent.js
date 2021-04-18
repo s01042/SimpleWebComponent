@@ -319,9 +319,10 @@ export default class ServiceComponent {
 
         const that = this
         let promise = new Promise(function(resolve, reject) {
-            //make sure, that the deserialization takes place only once
-            //if dataSet is not null, we are not here for the first time
-            if(that.dataSet != null) resolve (that.dataSet) 
+            //  make sure, that the deserialization takes place only once
+            //  if dataSet is not null, we are not here for the first time
+            //  18.04.2021 i will switch this temporary off 
+            //if (that.dataSet != null) resolve (that.dataSet) 
 
             that.myLocalStorage = localStorage
             let persistedData = that.myLocalStorage.getItem('s01042.GPSLogger.v1')
@@ -516,6 +517,8 @@ export default class ServiceComponent {
         // now wrap the async call into a promise
         const promise = new Promise(function(resolve, reject) {
             // try to fetch the data using the CORS proxy
+            // by default, in cross-site XMLHttpRequest or Fetch invocations, 
+            // browsers will not send credentials.
             fetch(proxyURL + serviceUrl)
                 .then( response => {
                     if( response.ok ) {
