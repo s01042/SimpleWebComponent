@@ -7,12 +7,16 @@ export default class AppConfig {
      * maybe i should switch to https://openweathermap.org/
      * i'm not really satisfied with the quality of weather data from metaweather
      * trouble is, metaweather don't support cors header
+     * 21.04.2022
+     * I changed the implementation of the serviceComponent when consuming 
+     * the weather webservice to get rid of the cors problems. I'm now hosting
+     * my own web service proxy on heroku (see web service url in source code). 
+     * no cors proxy needed anymore
      */
-    locationServiceURL = 'https://www.metaweather.com/api/location/search/?lattlong='
-    weatherServiceURL = 'https://www.metaweather.com/api/location/'
-    CORSProxyURL_PROD = 'https://cors-anywhere.herokuapp.com/'    
-    /*  CORSProxyURL_PROD = 'https://thingproxy.freeboard.io/fetch/'    */
-    CORSProxyURL_DEV = 'http://localhost:8080/'
+    //locationServiceURL = 'https://www.metaweather.com/api/location/search/?lattlong='
+    locationServiceURL = 'https://infinite-castle-19858.herokuapp.com/api/getNearestCities?latlong='
+    //weatherServiceURL = 'https://www.metaweather.com/api/location/'
+    weatherServiceURL = 'https://infinite-castle-19858.herokuapp.com/api/getWeatherFromWOEID?woeid='
     weatherIconBaseUrl = 'https://www.metaweather.com/static/img/weather/'
     isRunningInDevEnvironment
 

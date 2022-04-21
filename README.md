@@ -75,6 +75,10 @@ node .\server.js
 
 In production environment i use the CORS proxy from https://cors-anywhere.herokuapp.com, but of course only when fetching data from metaweather.com. **A CORS proxy is a matter of trust**. Every data goes through it. Who knows what happens there. 
 
+# I got rid of CORS of course
+
+The CORS proxies are regulary abused by some people. They use to hide behind them. Every few weeks those proxies were therefore shut down or severely restricted. To get rid of this hustle i implemented my own service proxy and host it free of charge on heroku. The implementation is simple and based on Node.js and Express.js. It is not more than a simple route definition, a rate-limiter to prevent flooding and denial of service attacks and of course the necessary CORS header in the response header.   
+
 # How i use the Google API
 
 Google APIs are managed APIs. Some are of cost others are completly free. All APIs have quotas. Before using a managed Google API you have to request it in the Google developer console. This request takes place **on your own behalf**, so **you** will be charged for and **your** quotas will be affected by consuming the API. In response to this request you get **your** API-Key and **your** ClientID. These two values are essential for the further usage of the API. Everybody who knows about this two data can now consume the API. So it is very important to keep this data safe and private. That's why it is no good idea to to write down this data in your source code and then host this code in a public source code repository like GitHub. 

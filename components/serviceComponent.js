@@ -513,13 +513,13 @@ export default class ServiceComponent {
         } = fromGeolocation
         // build webservice url 
         let serviceUrl = this.appConfig.locationServiceURL + lat + ',' + long
-        let proxyURL = this.appConfig.CORSProxyURL
+        //let proxyURL = this.appConfig.CORSProxyURL
         // now wrap the async call into a promise
         const promise = new Promise(function(resolve, reject) {
             // try to fetch the data using the CORS proxy
             // by default, in cross-site XMLHttpRequest or Fetch invocations, 
             // browsers will not send credentials.
-            fetch(proxyURL + serviceUrl)
+            fetch(serviceUrl)
                 .then( response => {
                     if( response.ok ) {
                         // we await json data from the web service call
@@ -553,11 +553,11 @@ export default class ServiceComponent {
     getWeatherFromWOEID(theWOEID) {
 
         let serviceUrl = this.appConfig.weatherServiceURL + theWOEID
-        let proxyURL = this.appConfig.CORSProxyURL
+        //let proxyURL = this.appConfig.CORSProxyURL
         
         return new Promise(function(resolve, reject) {
             try {
-                fetch(proxyURL + serviceUrl)
+                fetch(serviceUrl)
                     .then( response => {
                         if( response.ok ) {
                             response.json()
