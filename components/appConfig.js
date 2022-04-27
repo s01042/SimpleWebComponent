@@ -38,6 +38,7 @@ export default class AppConfig {
     // the Google File ID 
     FILE_ID = null
     
+    FORCE_NEW_GOOGLE_LOGIN = false
 
     /**
      * default for isRunningInDevEnvironment is FALSE
@@ -47,6 +48,14 @@ export default class AppConfig {
      */
     constructor(isRunningInDevEnvironment = false) {
         this.isRunningInDevEnvironment = isRunningInDevEnvironment
+    }
+
+    get forceNewGoogleLogin () {
+        return this.FORCE_NEW_GOOGLE_LOGIN
+    }
+
+    set forceNewGoogleLogin (newValue) {
+        this.FORCE_NEW_GOOGLE_LOGIN = newValue
     }
 
     get FileID() {

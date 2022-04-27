@@ -263,24 +263,31 @@ function editAppConfig() {
     const configDialog = document.getElementById('config')
     const saveButton = configDialog.querySelector('sl-button[type="info"]')
     const cancelButton = configDialog.querySelector('sl-button[type="secondary"]')
+    // select the dialog fields and set the actual values
     const apiKey = configDialog.querySelector('sl-input[name="apikey"]')
     apiKey.value = myAppConfig.ApiKey
+
+    const forceNewGoogleLogin = configDialog.querySelector('sl-checkbox')
+    forceNewGoogleLogin.checked = myAppConfig.forceNewGoogleLogin
+
     const clientID = configDialog.querySelector('sl-input[name="clientid"]')
     clientID.value = myAppConfig.ClientID
+
     const fileID = configDialog.querySelector('sl-input[name="fileid"]')
     fileID.value = myAppConfig.FileID
-    saveButton.addEventListener ('click', () => {
+    // i now use onclick instead of addEventListener 
+    saveButton.onclick = () => {
         configDialog.hide()
         myAppConfig.ApiKey = apiKey.value
         myAppConfig.ClientID = clientID.value
+        myAppConfig.forceNewGoogleLogin = forceNewGoogleLogin.checked
         myServiceComponent.updateAppConfig()
         notify (`App Config saved`, 'info', 'check2-circle', 5000)
-    })
-    cancelButton.addEventListener ('click', () => {
+    }
+    cancelButton.onclick = () => {
         configDialog.hide()
-    })
+    }
     configDialog.show()
-
 }
 
 function toggleProgressDialog () {

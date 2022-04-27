@@ -287,11 +287,15 @@ export default class ServiceComponent {
      * after loading and initializing gapi we can check the 
      * current login state and logon if necessary
      * the promise will be resolved with a googleUser object
+     * REMEMBER!
+     * if you changed your code you need to force the user to reauthenticate 
+     * or you're just running with the old scopes.
      */
     doGoogleSignIn () {
         let self = this
         let promise = new Promise ((resolve, reject) => {
             const initialSignedIn = self.gapi.auth2.getAuthInstance().isSignedIn.get()
+            // if NOT signedIn signIn
             if (! initialSignedIn) {
                 self.gapi.auth2.getAuthInstance().signIn()
                     .then (googleUser => {
@@ -300,12 +304,26 @@ export default class ServiceComponent {
                     .catch (e => {
                         reject (e)
                     })
+            // if already signedIn and forceNewGoogleLogin is true, 
+            // sign out and force a new login
+            } else if (self.appConfig.forceNewGoogleLogin) {
+                self.gapi.auth2.getAuthInstance().signOut().then ( () => {
+                    self.gapi.auth2.getAuthInstance().disconnect ()
+                    self.gapi.auth2.getAuthInstance().signIn ()
+                        .then (googleUser => {
+                            resolve (googleUser)
+                        })
+                        .catch (e => {
+                            reject (e)
+                        })
+                })
             } else {
                 resolve (self.gapi.auth2.getAuthInstance().currentUser.get())
             }
         })
         return promise
     }
+
 
     /**
      * this is not the perfect solution!
